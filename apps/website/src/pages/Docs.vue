@@ -51,8 +51,11 @@
         >
           <div class="docs-card-top">
             <span class="docs-emoji">{{ item.emoji }}</span>
-            <div>
-              <p class="docs-name">{{ item.name }}</p>
+            <div style="flex:1; min-width:0">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap">
+                <p class="docs-name">{{ item.name }}</p>
+                <span v-if="item.isMicro" class="docs-micro-badge">微</span>
+              </div>
               <p class="docs-name-en">{{ item.nameEn }}</p>
             </div>
             <code class="docs-code">{{ item.auCode }}</code>
@@ -61,9 +64,17 @@
           <p class="docs-desc">{{ item.desc }}</p>
           <p class="docs-desc-en">{{ item.descEn }}</p>
 
+          <!-- Meta tags -->
+          <div class="docs-meta">
+            <span v-if="item.strength" class="docs-tag">💪 {{ item.strength }}</span>
+            <span v-if="item.muscle" class="docs-tag">🔬 {{ item.muscle }}</span>
+            <span v-if="item.scene" class="docs-tag docs-tag-scene">🎬 {{ item.scene }}</span>
+          </div>
+
           <details class="docs-prompt-details">
             <summary>AI 提示词</summary>
-            <p class="docs-prompt">{{ item.prompt }}</p>
+            <p class="docs-prompt"><span class="prompt-lang">中</span>{{ item.promptCn || item.prompt }}</p>
+            <p class="docs-prompt" style="margin-top:6px"><span class="prompt-lang">EN</span>{{ item.promptEn }}</p>
           </details>
 
           <div v-if="item.conflict" class="docs-conflict">
@@ -188,6 +199,38 @@ function filteredByCat(type) {
   margin-top:8px; font-size:11.5px; color:#f87171;
   background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.2);
   border-radius:6px; padding:5px 10px;
+}
+
+/* ── 微表情 badge ── */
+.docs-micro-badge {
+  font-size: 9.5px; font-weight: 700;
+  color: #06b6d4; background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.28);
+  border-radius: 4px; padding: 1px 5px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Meta tags ── */
+.docs-meta {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin: 8px 0 4px;
+}
+.docs-tag {
+  font-size: 10.5px; color: var(--tx3);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-bd);
+  border-radius: 5px; padding: 2px 7px;
+  white-space: nowrap; max-width: 100%; overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docs-tag-scene { color: var(--ac); border-color: var(--ac-bd); background: var(--ac-soft); }
+
+/* ── Prompt lang label ── */
+.prompt-lang {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  color: var(--tx3); background: rgba(255,255,255,0.07);
+  border-radius: 3px; padding: 0 4px; margin-right: 5px;
+  vertical-align: middle; letter-spacing: 0.04em;
 }
 
 .docs-empty { color:var(--tx3); font-size:13px; padding:16px 0; }

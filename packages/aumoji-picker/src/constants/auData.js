@@ -1,9 +1,21 @@
+// 字段说明：name/desc/prompt 为向后兼容别名（= nameCn/descCn/promptCn）
 export const AU_DATA = {
   basic: [
     {
-      name: '真笑(自然)', nameEn: 'Genuine Smile',
-      emoji: '😄',
-      auCode: 'AU6+AU12',
+      id: 'basic_001',
+      name: '真笑(自然)', nameCn: '真笑(自然)', nameEn: 'Genuine Smile',
+      emoji: '😄', category: 'basic',
+      auCode: 'AU6+AU12', auFull: 'AU6+AU12',
+      strength: '3-4级', muscle: '眼轮匝肌收缩+颧大肌拉升嘴角',
+      conflict: '',
+      desc: '影视级真实笑容，眼部带皱纹，无表演感',
+      descCn: '影视级真实笑容，眼部带皱纹，无表演感',
+      descEn: 'Natural smile with eye wrinkles, authentic',
+      prompt: '电影特写，真实自然笑容，眼角收缩，嘴角上扬，高清写实，面部无扭曲',
+      promptCn: '电影特写，真实自然笑容，眼角收缩，嘴角上扬，高清写实，面部无扭曲',
+      promptEn: 'cinematic close-up, genuine smile, AU6+AU12, photorealistic, no facial distortion',
+      scene: '影视特写/日常剧情/数字人',
+      isMicro: false, icon: 'fa-regular fa-face-laugh-squint',
       desc: '眼角收缩+嘴角上扬，影视级真实笑容',
       descEn: 'Cheek raiser + Lip corner puller, cinematic genuine smile',
       prompt: 'cinematic, genuine smile, AU6+AU12, photorealistic, Duchenne smile, eye crinkle',
