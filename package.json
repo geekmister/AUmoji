@@ -2,17 +2,11 @@
   "name": "aumoji",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.5.32"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.5",
-    "vite": "^8.0.4"
+    "dev": "pnpm --filter aumoji-website dev",
+    "dev:picker": "pnpm --filter aumoji-picker dev",
+    "build": "pnpm --filter aumoji-picker build && pnpm --filter aumoji-website build",
+    "build:picker": "pnpm --filter aumoji-picker build",
+    "build:website": "pnpm --filter aumoji-website build"
   }
 }

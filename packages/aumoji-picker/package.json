@@ -1,0 +1,29 @@
+{
+  "name": "aumoji-picker",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Cinematic FACS AU expression picker component for Vue 3",
+  "keywords": ["vue", "facs", "au", "expression", "picker", "animation", "ai"],
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/aumoji-picker.js",
+      "require": "./dist/aumoji-picker.cjs"
+    }
+  },
+  "main": "./dist/aumoji-picker.cjs",
+  "module": "./dist/aumoji-picker.js",
+  "files": ["dist"],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "vite": "^8.0.4",
+    "vue": "^3.5.32"
+  }
+}

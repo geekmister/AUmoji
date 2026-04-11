@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* ════════════════════════════════════════
+   WEBSITE DESIGN TOKENS
+════════════════════════════════════════ */
+:root {
+  --bg:          #09090f;
+  --bg2:         #0f1018;
+  --card:        rgba(255,255,255,0.04);
+  --card-bd:     rgba(255,255,255,0.08);
+  --tx:          #f1f5f9;
+  --tx2:         #94a3b8;
+  --tx3:         #475569;
+  --ac:          #8b5cf6;
+  --ac2:         #6366f1;
+  --ac-soft:     rgba(139,92,246,0.12);
+  --ac-bd:       rgba(139,92,246,0.30);
+  --ac-glow:     rgba(139,92,246,0.25);
+  --divider:     rgba(255,255,255,0.07);
+  --ease:        0.18s ease;
+}
+
+/* ════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--tx2);
+  background-color: var(--bg);
+  min-height: 100vh;
+}
+
+/* ════════════════════════════════════════
+   SCROLLBAR
+════════════════════════════════════════ */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+/* ════════════════════════════════════════
+   TYPOGRAPHY
+════════════════════════════════════════ */
+h1, h2, h3, h4 { color: var(--tx); font-weight: 700; line-height: 1.2; }
+
+/* ════════════════════════════════════════
+   CARD
+════════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-bd);
+  border-radius: 16px;
+}
+
+/* ════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-radius: 10px; font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; outline: none;
+  padding: 0 20px; height: 42px; white-space: nowrap;
+  text-decoration: none; transition: all var(--ease);
+  font-family: inherit;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--ac), var(--ac2));
+  color: #fff;
+  box-shadow: 0 4px 16px var(--ac-glow);
+}
+.btn-primary:hover { filter: brightness(1.08); box-shadow: 0 6px 24px var(--ac-glow); transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--card-bd);
+  color: var(--tx2);
+}
+.btn-outline:hover { border-color: var(--ac-bd); color: var(--tx); background: var(--ac-soft); }
+
+/* ════════════════════════════════════════
+   CODE BLOCK
+════════════════════════════════════════ */
+.code-block {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--card-bd);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 13.5px;
+  color: #a5f3fc;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ════════════════════════════════════════
+   GRADIENT TEXT
+════════════════════════════════════════ */
+.grad-text {
+  background: linear-gradient(135deg, #c4b5fd, #818cf8, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+.site-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(9,9,15,0.80);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--divider);
+}
+
+/* ════════════════════════════════════════
+   SECTION DIVIDER
+════════════════════════════════════════ */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--divider);
+}
+
+/* ════════════════════════════════════════
+   BADGE
+════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  border: 1px solid var(--ac-bd);
+  background: var(--ac-soft); color: var(--ac);
+}
+
+/* ════════════════════════════════════════
+   FEATURE CARD
+════════════════════════════════════════ */
+.feat-card {
+  background: var(--card); border: 1px solid var(--card-bd);
+  border-radius: 14px; padding: 24px;
+  transition: border-color var(--ease), background var(--ease);
+}
+.feat-card:hover { border-color: var(--ac-bd); background: var(--ac-soft); }
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+  background: var(--ac-soft); border: 1px solid var(--ac-bd);
+}
