@@ -17,7 +17,26 @@
   --ac-bd:       rgba(139,92,246,0.30);
   --ac-glow:     rgba(139,92,246,0.25);
   --divider:     rgba(255,255,255,0.07);
+  --hover-bg:    rgba(255,255,255,0.06);
   --ease:        0.18s ease;
+}
+
+/* ════ Light Mode ════ */
+[data-theme="light"] {
+  --bg:       #ffffff;
+  --bg2:      #f1f5f9;
+  --card:     rgba(0,0,0,0.03);
+  --card-bd:  rgba(0,0,0,0.09);
+  --tx:       #0f172a;
+  --tx2:      #334155;
+  --tx3:      #94a3b8;
+  --ac:       #7c3aed;
+  --ac2:      #4f46e5;
+  --ac-soft:  rgba(124,58,237,0.08);
+  --ac-bd:    rgba(124,58,237,0.22);
+  --ac-glow:  rgba(124,58,237,0.18);
+  --divider:  rgba(0,0,0,0.08);
+  --hover-bg: rgba(0,0,0,0.05);
 }
 
 /* ════════════════════════════════════════
@@ -95,6 +114,10 @@ h1, h2, h3, h4 { color: var(--tx); font-weight: 700; line-height: 1.2; }
   overflow-x: auto;
   white-space: pre;
 }
+[data-theme="light"] .code-block {
+  background: #1e293b;
+  border-color: rgba(30,41,59,0.25);
+}
 
 /* ════════════════════════════════════════
    GRADIENT TEXT
@@ -115,6 +138,9 @@ h1, h2, h3, h4 { color: var(--tx); font-weight: 700; line-height: 1.2; }
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border-bottom: 1px solid var(--divider);
+}
+[data-theme="light"] .site-nav {
+  background: rgba(255,255,255,0.88);
 }
 
 /* ════════════════════════════════════════

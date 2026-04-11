@@ -3,7 +3,7 @@
 
     <!-- Sidebar navigation -->
     <aside class="docs-sidebar">
-      <p class="sidebar-title">分类导航</p>
+      <p class="sidebar-title">{{ lang === 'zh' ? '分类导航' : 'Categories' }}</p>
       <a
         v-for="cat in CATEGORIES"
         :key="'nav-' + cat.type"
@@ -19,8 +19,12 @@
     <!-- Main Content -->
     <div class="docs-main">
     <div style="margin-bottom:40px">
-      <h1 style="font-size:28px; margin-bottom:8px">AU 指令对照表</h1>
-      <p style="color:var(--tx2)">FACS Action Units 完整参考文档 · 共 {{ totalCount }} 条</p>
+      <h1 style="font-size:28px; margin-bottom:8px">{{ lang === 'zh' ? 'AU 指令对照表' : 'AU Reference' }}</h1>
+      <p style="color:var(--tx2)">
+        {{ lang === 'zh' ? 'FACS Action Units 完整参考文档 · 共' : 'FACS Action Units complete reference · ' }}
+        {{ totalCount }}
+        {{ lang === 'zh' ? ' 条' : ' entries' }}
+      </p>
     </div>
 
     <!-- Search -->
@@ -29,7 +33,7 @@
       <input
         v-model="q"
         class="docs-search"
-        placeholder="搜索 AU 编号、表情名称…"
+        :placeholder="lang === 'zh' ? '搜索 AU 编号、表情名称…' : 'Search AU code or name…'"
         autocomplete="off"
       />
     </div>
@@ -38,7 +42,7 @@
     <div v-for="cat in CATEGORIES" :key="cat.type" :id="'cat-' + cat.type" style="margin-bottom:56px; scroll-margin-top:90px">
       <h2 class="cat-headline" :style="{ '--cat-c': cat.color }">
         <span class="cat-dot" :style="{ background: cat.color }"></span>
-        {{ cat.name }}
+        {{ lang === 'zh' ? cat.name : cat.nameEn }}
         <span class="cat-badge">{{ filteredByCat(cat.type).length }}</span>
       </h2>
 
@@ -61,8 +65,8 @@
             <code class="docs-code">{{ item.auCode }}</code>
           </div>
 
-          <p class="docs-desc">{{ item.desc }}</p>
-          <p class="docs-desc-en">{{ item.descEn }}</p>
+          <p class="docs-desc">{{ lang === 'zh' ? (item.descCn || item.desc) : item.descEn }}</p>
+          <p v-if="lang === 'zh'" class="docs-desc-en">{{ item.descEn }}</p>
 
           <!-- Meta tags -->
           <div class="docs-meta">
@@ -72,7 +76,7 @@
           </div>
 
           <details class="docs-prompt-details">
-            <summary>AI 提示词</summary>
+            <summary>{{ lang === 'zh' ? 'AI 提示词' : 'AI Prompt' }}</summary>
             <p class="docs-prompt"><span class="prompt-lang">中</span>{{ item.promptCn || item.prompt }}</p>
             <p class="docs-prompt" style="margin-top:6px"><span class="prompt-lang">EN</span>{{ item.promptEn }}</p>
           </details>
@@ -82,13 +86,13 @@
           </div>
           <div class="docs-card-footer">
             <button class="docs-copy-btn" @click="copyAuCode(item.auCode)" type="button">
-              {{ copiedCode === item.auCode ? '✓ 已复制' : '复制 AU 代码' }}
+              {{ copiedCode === item.auCode ? (lang === 'zh' ? '✓ 已复制' : '✓ Copied') : (lang === 'zh' ? '复制 AU 代码' : 'Copy AU Code') }}
             </button>
           </div>
         </div>
       </div>
 
-      <div v-else class="docs-empty">暂无匹配结果</div>
+      <div v-else class="docs-empty">{{ lang === 'zh' ? '暂无匹配结果' : 'No results found' }}</div>
     </div>
     </div><!-- /docs-main -->
   </div>
@@ -97,6 +101,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { AU_DATA, CATEGORIES } from 'aumoji-picker'
+import { useLang } from '../composables/useLang.js'
+
+const { lang } = useLang()
 
 const q          = ref('')
 const copiedCode = ref(null)

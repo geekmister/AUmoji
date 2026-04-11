@@ -1,8 +1,8 @@
 <template>
   <div class="pg-page">
     <div class="pg-hd">
-      <h1 class="pg-title">Interactive Playground</h1>
-      <p class="pg-sub">实时调整配置，查看 AUmoji Picker 的效果变化</p>
+      <h1 class="pg-title">{{ lang === 'zh' ? '交互演示场' : 'Interactive Playground' }}</h1>
+      <p class="pg-sub">{{ lang === 'zh' ? '实时调整配置，查看 AUmoji Picker 的效果变化' : 'Tweak settings in real-time and see AUmoji Picker respond instantly' }}</p>
     </div>
 
     <div class="pg-body">
@@ -10,12 +10,12 @@
       <!-- Config Panel -->
       <div class="card pg-config">
         <div class="config-header">
-          <p class="config-title">⚙️ &nbsp;配置</p>
-          <button class="reset-btn" @click="reset" type="button">重置</button>
+          <p class="config-title">⚙️ &nbsp;{{ lang === 'zh' ? '配置' : 'Config' }}</p>
+          <button class="reset-btn" @click="reset" type="button">{{ lang === 'zh' ? '重置' : 'Reset' }}</button>
         </div>
 
         <div class="config-group">
-          <label class="config-label">主题 (theme)</label>
+          <label class="config-label">{{ lang === 'zh' ? '主题' : 'Theme' }} (theme)</label>
           <div class="seg-ctrl">
             <button v-for="opt in ['light','dark','auto']" :key="opt"
               :class="['seg-btn', cfg.theme === opt && 'active']"
@@ -24,7 +24,7 @@
         </div>
 
         <div class="config-group">
-          <label class="config-label">语言 (lang)</label>
+          <label class="config-label">{{ lang === 'zh' ? '语言' : 'Language' }} (lang)</label>
           <div class="seg-ctrl">
             <button v-for="opt in ['zh','en']" :key="opt"
               :class="['seg-btn', cfg.lang === opt && 'active']"
@@ -33,7 +33,7 @@
         </div>
 
         <div class="config-group">
-          <label class="config-label">默认分类 (defaultCategory)</label>
+          <label class="config-label">{{ lang === 'zh' ? '默认分类' : 'Default Category' }} (defaultCategory)</label>
           <div class="seg-ctrl" style="flex-wrap:wrap">
             <button v-for="opt in ['basic','compound','micro','single']" :key="opt"
               :class="['seg-btn', cfg.defaultCategory === opt && 'active']"
@@ -42,7 +42,7 @@
         </div>
 
         <div class="config-group">
-          <label class="config-label">复制格式 (copyFormat)</label>
+          <label class="config-label">{{ lang === 'zh' ? '复制格式' : 'Copy Format' }} (copyFormat)</label>
           <div class="seg-ctrl">
             <button v-for="opt in ['auCode','prompt','none']" :key="opt"
               :class="['seg-btn', cfg.copyFormat === opt && 'active']"
@@ -51,7 +51,7 @@
         </div>
 
         <div class="config-group">
-          <label class="config-label">显示搜索 (showSearch)</label>
+          <label class="config-label">{{ lang === 'zh' ? '显示搜索' : 'Show Search' }} (showSearch)</label>
           <div class="seg-ctrl">
             <button :class="['seg-btn', cfg.showSearch && 'active']" @click="cfg.showSearch = true">true</button>
             <button :class="['seg-btn', !cfg.showSearch && 'active']" @click="cfg.showSearch = false">false</button>
@@ -59,21 +59,21 @@
         </div>
 
         <div class="config-group">
-          <label class="config-label">宽度 (width): {{ cfg.width }}px</label>
+          <label class="config-label">{{ lang === 'zh' ? '宽度' : 'Width' }} (width): {{ cfg.width }}px</label>
           <input type="range" min="280" max="500" v-model.number="cfg.width" class="range-input" />
         </div>
 
         <div class="config-group">
-          <label class="config-label">高度 (height): {{ cfg.height }}px</label>
+          <label class="config-label">{{ lang === 'zh' ? '高度' : 'Height' }} (height): {{ cfg.height }}px</label>
           <input type="range" min="320" max="640" v-model.number="cfg.height" class="range-input" />
         </div>
 
         <!-- Code preview -->
         <div style="margin-top:20px">
           <div class="code-preview-hd">
-            <p class="config-label">生成代码</p>
+            <p class="config-label">{{ lang === 'zh' ? '生成代码' : 'Generated Code' }}</p>
             <button class="copy-code-btn" @click="copyCode" :class="{ copied: codeCopied }" type="button">
-              {{ codeCopied ? '✓ 已复制' : '复制' }}
+              {{ codeCopied ? (lang === 'zh' ? '✓ 已复制' : '✓ Copied') : (lang === 'zh' ? '复制' : 'Copy') }}
             </button>
           </div>
           <div style="background:rgba(0,0,0,0.4); border:1px solid var(--card-bd); border-radius:8px; padding:12px; font-family:monospace; font-size:11.5px; color:#a5f3fc; line-height:1.7; white-space:pre-wrap; word-break:break-all">{{ generatedCode }}</div>
@@ -96,7 +96,7 @@
 
         <!-- Output -->
         <div v-if="output" class="pg-output card">
-          <p class="config-label" style="margin-bottom:10px">📋 &nbsp;onSelect 输出</p>
+          <p class="config-label" style="margin-bottom:10px">📋 &nbsp;{{ lang === 'zh' ? 'onSelect 输出' : 'onSelect output' }}</p>
           <div class="output-row">
             <span class="output-key">emoji</span>
             <span class="output-val">{{ output.emoji }}</span>
@@ -127,6 +127,9 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { AUmojiPicker } from 'aumoji-picker'
+import { useLang } from '../composables/useLang.js'
+
+const { lang } = useLang()
 
 const DEFAULT_CFG = {
   theme: 'dark',

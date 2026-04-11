@@ -7,20 +7,30 @@
       <div class="orb orb3"></div>
 
       <div class="hero-inner">
-        <div class="badge" style="margin-bottom:28px">✨ &nbsp;影视级 FACS 表情系统 · Vue 3</div>
+        <div class="badge" style="margin-bottom:28px">
+          ✨ &nbsp;{{ lang === 'zh' ? '影视级 FACS 表情系统 · Vue 3' : 'Cinematic FACS Expression System · Vue 3' }}
+        </div>
 
         <h1 class="hero-title">
-          <span class="grad-text">AU 表情</span>选择器<br>
-          <span style="font-size:0.65em; font-weight:700; color:var(--tx2)">为 AI 视频创作者打造</span>
+          <span class="grad-text">{{ lang === 'zh' ? 'AU 表情' : 'AU Emoji' }}</span>{{ lang === 'zh' ? '选择器' : ' Picker' }}<br>
+          <span style="font-size:0.65em; font-weight:700; color:var(--tx2)">
+            {{ lang === 'zh' ? '为 AI 视频创作者打造' : 'Built for AI Video Creators' }}
+          </span>
         </h1>
 
         <p class="hero-sub">
-          基于 FACS 面部动作编码系统，精准控制 21 种影视级表情。<br>
-          轻量、可配置、开箱即用，Vue 3 零运行时依赖。
+          <template v-if="lang === 'zh'">
+            基于 FACS 面部动作编码系统，精准控制 21 种影视级表情。<br>
+            轻量、可配置、开箱即用，Vue 3 零运行时依赖。
+          </template>
+          <template v-else>
+            Based on FACS Action Coding System — precise control over 21 cinematic expressions.<br>
+            Lightweight, configurable, zero runtime dependencies.
+          </template>
         </p>
 
         <div class="hero-ctas">
-          <a href="#demo" class="btn btn-primary">试一试 ↓</a>
+          <a href="#demo" class="btn btn-primary">{{ lang === 'zh' ? '试一试 ↓' : 'Try it ↓' }}</a>
           <a href="https://github.com/Geekmister/AUmoji" target="_blank" rel="noopener" class="btn btn-outline">
             <i class="fa-brands fa-github"></i> GitHub
           </a>
@@ -28,11 +38,11 @@
         </div>
 
         <div class="hero-stats">
-          <span>📦 &nbsp;零运行时依赖</span>
+          <span>📦 &nbsp;{{ lang === 'zh' ? '零运行时依赖' : 'Zero Dependencies' }}</span>
           <span class="stat-sep">·</span>
-          <span>🎭 &nbsp;21 个表情</span>
+          <span>🎭 &nbsp;21 {{ lang === 'zh' ? '个表情' : ' Expressions' }}</span>
           <span class="stat-sep">·</span>
-          <span>🌍 &nbsp;中 / EN 双语</span>
+          <span>🌍 &nbsp;{{ lang === 'zh' ? '中 / EN 双语' : 'zh / EN Bilingual' }}</span>
           <span class="stat-sep">·</span>
           <span>🎨 &nbsp;Light / Dark</span>
         </div>
@@ -52,8 +62,8 @@
     <!-- ══ DEMO ══ picker 独立全宽展示区 -->
     <section id="demo" class="demo-section">
       <div class="section-hd">
-        <h2>在线演示</h2>
-        <p>实时切换主题与语言，选择表情查看 AU 编号与 AI 提示词</p>
+        <h2>{{ lang === 'zh' ? '在线演示' : 'Live Demo' }}</h2>
+        <p>{{ lang === 'zh' ? '实时切换主题与语言，选择表情查看 AU 编号与 AI 提示词' : 'Toggle theme & language in real-time, select an expression to see AU code & AI prompt' }}</p>
       </div>
 
       <div class="demo-body">
@@ -78,15 +88,15 @@
 
         <!-- Output panel -->
         <div class="demo-output">
-          <p class="demo-output-label">😊 &nbsp;{{ demoLang === 'zh' ? '选择表情查看输出' : "What's Your Mood?" }}</p>
+          <p class="demo-output-label">😊 &nbsp;{{ lang === 'zh' ? '选择表情查看输出' : "Select an Expression" }}</p>
           <template v-if="lastSelected">
             <div class="output-em">{{ lastSelected.emoji }}</div>
             <div class="output-name">{{ lastSelected.name }}</div>
             <div class="output-name-en">{{ lastSelected.nameEn }}</div>
             <code class="output-code-badge">{{ lastSelected.auCode }}</code>
-            <p class="output-desc">{{ demoLang === 'zh' ? lastSelected.desc : lastSelected.descEn }}</p>
+            <p class="output-desc">{{ lang === 'zh' ? lastSelected.descCn || lastSelected.desc : lastSelected.descEn }}</p>
           </template>
-          <p v-else class="output-hint">点击左侧表情卡片</p>
+          <p v-else class="output-hint">{{ lang === 'zh' ? '点击左侧表情卡片' : 'Click an expression card' }}</p>
         </div>
       </div>
     </section>
@@ -97,8 +107,8 @@
     <section class="features-section">
       <div class="section-wrap-lg">
         <div class="section-hd">
-          <h2>为什么选择 AUmoji</h2>
-          <p>专为 AI 视频与影视制作工作流设计</p>
+          <h2>{{ lang === 'zh' ? '为什么选择 AUmoji' : 'Why AUmoji' }}</h2>
+          <p>{{ lang === 'zh' ? '专为 AI 视频与影视制作工作流设计' : 'Designed for AI video & cinematic production workflows' }}</p>
         </div>
 
         <div class="feat-grid" ref="featsRef">
@@ -109,8 +119,8 @@
             :style="{ transitionDelay: i * 90 + 'ms' }"
           >
             <div class="feat-icon">{{ feat.icon }}</div>
-            <h3 style="font-size:15px; margin-bottom:8px;">{{ feat.title }}</h3>
-            <p style="font-size:13px; color:var(--tx2); line-height:1.6">{{ feat.desc }}</p>
+            <h3 style="font-size:15px; margin-bottom:8px;">{{ lang === 'zh' ? feat.title : feat.titleEn }}</h3>
+            <p style="font-size:13px; color:var(--tx2); line-height:1.6">{{ lang === 'zh' ? feat.desc : feat.descEn }}</p>
           </div>
         </div>
       </div>
@@ -122,13 +132,13 @@
     <section class="qs-section">
       <div class="section-wrap-sm">
         <div class="section-hd">
-          <h2>快速开始</h2>
-          <p>三步集成到你的项目</p>
+          <h2>{{ lang === 'zh' ? '快速开始' : 'Quick Start' }}</h2>
+          <p>{{ lang === 'zh' ? '三步集成到你的项目' : 'Integrate in 3 steps' }}</p>
         </div>
 
         <div class="qs-steps">
           <div class="card" style="padding:24px">
-            <p class="step-label">① 安装</p>
+            <p class="step-label">{{ lang === 'zh' ? '① 安装' : '① Install' }}</p>
             <div class="install-tabs mt-3">
               <button
                 v-for="pm in ['npm','pnpm','yarn']" :key="pm"
@@ -139,11 +149,11 @@
             <div class="code-block install-code">{{ installCmds[installTab] }}</div>
           </div>
           <div class="card" style="padding:24px">
-            <p class="step-label">② 引入组件</p>
+            <p class="step-label">{{ lang === 'zh' ? '② 引入组件' : '② Import' }}</p>
             <div class="code-block mt-3">{{ importCode }}</div>
           </div>
           <div class="card" style="padding:24px">
-            <p class="step-label">③ 使用</p>
+            <p class="step-label">{{ lang === 'zh' ? '③ 使用' : '③ Use' }}</p>
             <div class="code-block mt-3">{{ usageCode }}</div>
           </div>
         </div>
@@ -152,22 +162,32 @@
 
     <!-- ══ FOOTER ══ -->
     <footer class="site-footer">
-      AUmoji © 2025 &nbsp;·&nbsp; 开源免费 &nbsp;·&nbsp; 基于 FACS for AI 创作者 &nbsp;·&nbsp;
+      AUmoji © 2025 &nbsp;·&nbsp; {{ lang === 'zh' ? '开源免费' : 'Open Source' }} &nbsp;·&nbsp; {{ lang === 'zh' ? '基于 FACS for AI 创作者' : 'FACS-based · For AI Creators' }} &nbsp;·&nbsp;
       <a href="https://github.com/Geekmister/AUmoji" target="_blank" rel="noopener" class="footer-link">GitHub ↗</a>
     </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { AUmojiPicker } from 'aumoji-picker'
+import { useTheme } from '../composables/useTheme.js'
+import { useLang }  from '../composables/useLang.js'
 
-const demoTheme    = ref('dark')
-const demoLang     = ref('zh')
+const { theme } = useTheme()
+const { lang }  = useLang()
+
+// Demo picker mirrors global theme/lang but can also be overridden locally
+const demoTheme    = ref(theme.value)
+const demoLang     = ref(lang.value)
 const lastSelected = ref(null)
 const featsRef     = ref(null)
 const installTab   = ref('npm')
+
+// Keep demo in sync with global toggles
+watch(theme, v => { demoTheme.value = v })
+watch(lang,  v => { demoLang.value  = v })
 
 const installCmds = {
   npm:  'npm install aumoji-picker',
@@ -196,10 +216,30 @@ function onDemoSelect(item) {
 }
 
 const features = [
-  { icon: '🎭', title: 'FACS 标准', desc: '完整实现面部动作编码系统，涵盖基础情绪、复合表情、微表情、单 AU 四大分类' },
-  { icon: '⚙️', title: '完全可配置', desc: '支持 theme / lang / width / height / copyFormat 等 Props，满足各类集成场景' },
-  { icon: '🪶', title: '零依赖打包', desc: 'Vue 3 为 peerDependency，打包产物仅包含组件本身，不附带任何运行时依赖' },
-  { icon: '🌍', title: '国际化', desc: '内置中英文双语，切换无需重新加载，所有界面文案均支持 lang prop 控制' },
+  {
+    icon: '🎭',
+    title: 'FACS 标准', titleEn: 'FACS Standard',
+    desc: '完整实现面部动作编码系统，涵盖基础情绪、复合表情、微表情、单 AU 四大分类',
+    descEn: 'Full FACS implementation — basic emotions, compound expressions, micro-expressions & single AUs'
+  },
+  {
+    icon: '⚙️',
+    title: '完全可配置', titleEn: 'Fully Configurable',
+    desc: '支持 theme / lang / width / height / copyFormat 等 Props，满足各类集成场景',
+    descEn: 'Flexible props: theme, lang, width, height, copyFormat — fits any integration scenario'
+  },
+  {
+    icon: '🪶',
+    title: '零依赖打包', titleEn: 'Zero Dependencies',
+    desc: 'Vue 3 为 peerDependency，打包产物仅包含组件本身，不附带任何运行时依赖',
+    descEn: 'Vue 3 is a peerDependency — bundle only contains the component itself, no extra runtime deps'
+  },
+  {
+    icon: '🌍',
+    title: '国际化', titleEn: 'i18n Built-in',
+    desc: '内置中英文双语，切换无需重新加载，所有界面文案均支持 lang prop 控制',
+    descEn: 'Built-in zh / en bilingual support — no reload needed, all labels follow the lang prop'
+  },
 ]
 
 const importCode = `import { AUmojiPicker } from 'aumoji-picker'`
