@@ -10,6 +10,9 @@ importers:
 
   apps/website:
     dependencies:
+      aumoji-data:
+        specifier: workspace:*
+        version: link:../../packages/aumoji-data
       aumoji-picker:
         specifier: workspace:*
         version: link:../../packages/aumoji-picker
@@ -36,7 +39,13 @@ importers:
         specifier: ^8.0.4
         version: 8.0.8(jiti@2.6.1)
 
+  packages/aumoji-data: {}
+
   packages/aumoji-picker:
+    dependencies:
+      aumoji-data:
+        specifier: workspace:*
+        version: link:../aumoji-data
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.5
