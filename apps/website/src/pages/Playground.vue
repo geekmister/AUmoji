@@ -1,14 +1,14 @@
 <template>
-  <div class="mx-auto max-w-6xl px-5 py-14">
-    <div class="mb-10">
-      <h1 class="text-3xl mb-2">Interactive Playground</h1>
-      <p style="color:var(--tx2)">实时调整配置，查看 AUmoji Picker 的效果变化</p>
+  <div class="pg-page">
+    <div class="pg-hd">
+      <h1 class="pg-title">Interactive Playground</h1>
+      <p class="pg-sub">实时调整配置，查看 AUmoji Picker 的效果变化</p>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-8 items-start">
+    <div class="pg-body">
 
       <!-- Config Panel -->
-      <div class="card flex-shrink-0" style="width:100%; max-width:300px; padding:24px;">
+      <div class="card pg-config">
         <div class="config-header">
           <p class="config-title">⚙️ &nbsp;配置</p>
           <button class="reset-btn" @click="reset" type="button">重置</button>
@@ -81,7 +81,7 @@
       </div>
 
       <!-- Picker Preview -->
-      <div class="flex-1 flex flex-col items-center gap-4" style="min-width:0; overflow-x:hidden">
+      <div class="pg-preview">
         <AUmojiPicker
           :key="pickerKey"
           :theme="cfg.theme"
@@ -95,7 +95,7 @@
         />
 
         <!-- Output -->
-        <div v-if="output" class="card" style="width:100%; max-width:420px; padding:16px;">
+        <div v-if="output" class="pg-output card">
           <p class="config-label" style="margin-bottom:10px">📋 &nbsp;onSelect 输出</p>
           <div class="output-row">
             <span class="output-key">emoji</span>
@@ -180,7 +180,62 @@ const generatedCode = computed(() => {
 </script>
 
 <style scoped>
-.config-title { font-size:13px; font-weight:700; color:var(--tx); margin-bottom:20px; }
+/* ── Page layout ── */
+.pg-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+.pg-hd {
+  margin-bottom: 40px;
+}
+.pg-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--tx);
+  margin-bottom: 6px;
+}
+.pg-sub { font-size: 15px; color: var(--tx2); }
+
+.pg-body {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Config panel */
+.pg-config {
+  width: 300px;
+  flex-shrink: 0;
+  padding: 24px;
+  position: sticky;
+  top: 72px;
+}
+
+/* Picker preview column */
+.pg-preview {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Output card */
+.pg-output {
+  width: 100%;
+  max-width: 460px;
+  padding: 18px;
+}
+
+@media (max-width: 860px) {
+  .pg-body { flex-direction: column; align-items: stretch; }
+  .pg-config { width: 100%; position: static; }
+  .pg-preview { align-items: stretch; }
+}
+
+.config-title { font-size:13px; font-weight:700; color:var(--tx); margin-bottom:0; }
 .config-group { margin-bottom:18px; }
 .config-label { display:block; font-size:11.5px; font-weight:600; color:var(--tx2); margin-bottom:7px; letter-spacing:0.02em; }
 
@@ -226,4 +281,52 @@ const generatedCode = computed(() => {
 }
 .copy-code-btn:hover { opacity:0.8; }
 .copy-code-btn.copied { color:#4ade80; background:rgba(74,222,128,0.1); border-color:rgba(74,222,128,0.3); }
+
+/* ── Page layout ── */
+.pg-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+.pg-hd { margin-bottom: 40px; }
+.pg-title { font-size: 26px; font-weight: 800; color: var(--tx); margin-bottom: 6px; }
+.pg-sub { font-size: 15px; color: var(--tx2); }
+
+.pg-body {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Config panel */
+.pg-config {
+  width: 300px;
+  flex-shrink: 0;
+  padding: 24px;
+  position: sticky;
+  top: 72px;
+}
+
+/* Picker preview column */
+.pg-preview {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Output card */
+.pg-output {
+  width: 100%;
+  max-width: 460px;
+  padding: 18px;
+}
+
+@media (max-width: 860px) {
+  .pg-body { flex-direction: column; }
+  .pg-config { width: 100%; position: static; }
+  .pg-preview { align-items: stretch; }
+}
 </style>

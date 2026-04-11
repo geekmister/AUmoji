@@ -18,13 +18,13 @@
 
     <!-- Main Content -->
     <div class="docs-main">
-    <div class="mb-10">
-      <h1 class="text-3xl mb-2">AU 指令对照表</h1>
+    <div style="margin-bottom:40px">
+      <h1 style="font-size:28px; margin-bottom:8px">AU 指令对照表</h1>
       <p style="color:var(--tx2)">FACS Action Units 完整参考文档 · 共 {{ totalCount }} 条</p>
     </div>
 
     <!-- Search -->
-    <div class="docs-search-wrap mb-8">
+    <div class="docs-search-wrap" style="margin-bottom:32px">
       <span style="font-size:14px; color:var(--tx3)">🔍</span>
       <input
         v-model="q"
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Categories -->
-    <div v-for="cat in CATEGORIES" :key="cat.type" :id="'cat-' + cat.type" class="mb-12" style="scroll-margin-top: 90px">
+    <div v-for="cat in CATEGORIES" :key="cat.type" :id="'cat-' + cat.type" style="margin-bottom:56px; scroll-margin-top:90px">
       <h2 class="cat-headline" :style="{ '--cat-c': cat.color }">
         <span class="cat-dot" :style="{ background: cat.color }"></span>
         {{ cat.name }}
@@ -45,7 +45,7 @@
       <div v-if="filteredByCat(cat.type).length" class="docs-grid">
         <div
           v-for="item in filteredByCat(cat.type)"
-          :key="item.auCode"
+          :key="item.id || item.auCode + '-' + cat.type"
           class="docs-card"
           :style="{ '--cat-c': cat.color }"
         >
@@ -181,9 +181,10 @@ function filteredByCat(type) {
   white-space:nowrap; flex-shrink:0;
 }
 
-.docs-desc    { font-size:12.5px; color:var(--tx2); margin-bottom:3px; }
-.docs-desc-en { font-size:11.5px; color:var(--tx3); margin-bottom:10px; }
+.docs-desc    { font-size:12.5px; color:var(--tx2); margin-bottom:4px; }
+.docs-desc-en { font-size:11.5px; color:var(--tx3); margin-bottom:12px; }
 
+.docs-prompt-details { margin-top: 12px; }
 .docs-prompt-details summary {
   font-size:11.5px; color:var(--tx3); cursor:pointer;
   user-select:none; font-weight:500;
