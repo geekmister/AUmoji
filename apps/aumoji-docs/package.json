@@ -1,5 +1,5 @@
 {
-  "name": "aumoji-web",
+  "name": "aumoji-docs",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -11,10 +11,10 @@
   "dependencies": {
     "astro": "^4.7.2",
     "vue": "^3.5.32",
-    "aumoji-picker": "workspace:*",
-    "aumoji-data": "workspace:*"
+    "aumoji-picker": "workspace:*"
   },
   "devDependencies": {
+    "@astrojs/mdx": "^3.1.7",
     "@astrojs/vue": "^4.3.0",
     "@astrojs/tailwind": "^5.1.1",
     "astro-icon": "^1.1.0",

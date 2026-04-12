@@ -41,10 +41,13 @@ import 'aumoji-picker/dist/style.css'
 获取完整的 AU 表情数据：
 
 ```javascript
-import { expressions, categories } from 'aumoji-data'
+import { AU_DATA, CATEGORIES } from 'aumoji-picker'
+
+const expressions = Object.values(AU_DATA).flat()
+const categories = CATEGORIES
 
 console.log(expressions) // 31 个表情
-console.log(categories)  // 5 个分类
+console.log(categories)  // 4 个分类
 ```
 
 ## 常见用途
@@ -52,10 +55,12 @@ console.log(categories)  // 5 个分类
 ### 1. 搜索特定表情
 
 ```javascript
-import { expressions } from 'aumoji-data'
+import { AU_DATA } from 'aumoji-picker'
 
-const realSmile = expressions.find(au => au.id === 'AU06')
-console.log(realSmile.name_cn) // "真笑"
+const expressions = Object.values(AU_DATA).flat()
+
+const realSmile = expressions.find(au => au.id === 'basic_001')
+console.log(realSmile.nameCn) // "真笑(自然)"
 ```
 
 ### 2. 按分类筛选

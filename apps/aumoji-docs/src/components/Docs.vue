@@ -73,7 +73,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { AU_DATA, CATEGORIES } from 'aumoji-data'
+import { AU_DATA, CATEGORIES } from '../data/auData.js'
 
 // 收集所有表情数据
 const allExpressions = Object.values(AU_DATA).flat()

@@ -10,7 +10,6 @@ export default defineConfig({
     alias: {
       // In dev: resolve aumoji-picker directly from source (no build needed)
       'aumoji-picker': resolve(__dirname, '../../packages/aumoji-picker/src/index.js'),
-      'aumoji-data':   resolve(__dirname, '../../packages/aumoji-data/index.js'),
     },
   },
   server: {

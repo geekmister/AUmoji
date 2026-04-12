@@ -100,7 +100,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { AU_DATA, CATEGORIES } from 'aumoji-picker'
+import { AU_DATA, CATEGORIES } from '../data/auData.js'
 import { useLang } from '../composables/useLang.js'
 
 const { lang } = useLang()

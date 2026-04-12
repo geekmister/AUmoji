@@ -3,10 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "pnpm --filter aumoji-website dev",
+    "dev": "pnpm --filter aumoji-docs dev",
     "dev:picker": "pnpm --filter aumoji-picker dev",
-    "build": "pnpm --filter aumoji-picker build && pnpm --filter aumoji-website build",
+    "build": "pnpm --filter aumoji-picker build && pnpm --filter aumoji-docs build",
     "build:picker": "pnpm --filter aumoji-picker build",
+    "build:docs": "pnpm --filter aumoji-docs build",
     "build:website": "pnpm --filter aumoji-website build"
   }
 }

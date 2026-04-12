@@ -39,8 +39,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build Astro website
-        run: pnpm --filter aumoji-web build
+      - name: Build Astro docs
+        run: pnpm --filter aumoji-docs build
         env:
           CI: true
 
@@ -50,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/aumoji-web/dist
+          path: apps/aumoji-docs/dist
 
       - id: deployment
         name: Deploy to GitHub Pages
