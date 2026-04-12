@@ -35,7 +35,7 @@
     </nav>
 
     <!-- ─── Scrollable Body ─── -->
-    <div class="aup-body" ref="bodyRef" @scroll="onScroll" :style="selected ? { paddingBottom: '118px' } : {}">
+    <div class="aup-body" ref="bodyRef" @scroll="onScroll" :style="detailVisible ? { paddingBottom: '118px' } : {}">
 
       <!-- Search results -->
       <template v-if="query">
@@ -51,7 +51,16 @@
             @click="pick(item)"
             type="button"
           >
-            <span class="aup-em">{{ item.emoji }}</span>
+            <span class="aup-em">
+              <img
+                v-if="item.faceImg"
+                :src="item.faceImg"
+                :alt="lang === 'zh' ? item.name : item.nameEn"
+                class="aup-face"
+                loading="lazy"
+              />
+              <span v-else>{{ item.emoji }}</span>
+            </span>
             <span class="aup-nm">{{ lang === 'zh' ? item.name : item.nameEn }}</span>
             <span class="aup-cd">{{ item.auCode }}</span>
           </button>
@@ -78,7 +87,16 @@
               type="button"
               :title="item.auCode"
             >
-              <span class="aup-em">{{ item.emoji }}</span>
+              <span class="aup-em">
+                <img
+                  v-if="item.faceImg"
+                  :src="item.faceImg"
+                  :alt="lang === 'zh' ? item.name : item.nameEn"
+                  class="aup-face"
+                  loading="lazy"
+                />
+                <span v-else>{{ item.emoji }}</span>
+              </span>
               <span class="aup-nm">{{ lang === 'zh' ? item.name : item.nameEn }}</span>
               <span class="aup-cd">{{ item.auCode }}</span>
             </button>
@@ -90,9 +108,18 @@
 
     <!-- ─── Detail Panel ─── -->
     <transition name="t-detail">
-      <div v-if="selected" class="aup-detail">
+      <div v-if="detailVisible" class="aup-detail">
         <div class="aup-detail-top">
-          <span class="aup-detail-em">{{ selected.emoji }}</span>
+          <span class="aup-detail-em">
+            <img
+              v-if="selected.faceImg"
+              :src="selected.faceImg"
+              :alt="lang === 'zh' ? selected.name : selected.nameEn"
+              class="aup-detail-face"
+              loading="lazy"
+            />
+            <span v-else>{{ selected.emoji }}</span>
+          </span>
           <div class="aup-detail-meta">
             <div class="aup-detail-nm">{{ lang === 'zh' ? selected.name : selected.nameEn }}</div>
             <div class="aup-detail-nm2">{{ lang === 'zh' ? selected.nameEn : selected.name }}</div>
@@ -110,7 +137,7 @@
 
     <!-- ─── Toast ─── -->
     <transition name="t-toast">
-      <div v-if="toast" class="aup-toast" :style="selected ? { bottom: '124px' } : {}">✓ {{ toast }}</div>
+      <div v-if="toast" class="aup-toast" :style="detailVisible ? { bottom: '124px' } : {}">✓ {{ toast }}</div>
     </transition>
   </div>
 </template>
@@ -127,13 +154,15 @@ const props = defineProps({
   /** 'zh' | 'en' */
   lang: { type: String, default: 'zh' },
   /** Picker width in px */
-  width: { type: Number, default: 350 },
+  width: { type: Number, default: 460 },
   /** Picker height in px */
-  height: { type: Number, default: 450 },
+  height: { type: Number, default: 620 },
   /** Category to show on mount */
   defaultCategory: { type: String, default: 'basic' },
   /** Show search bar */
   showSearch: { type: Boolean, default: true },
+  /** Show bottom detail panel after clicking an item */
+  showDetailPanel: { type: Boolean, default: false },
   /** What to auto-copy on select: 'auCode' | 'prompt' | 'none' */
   copyFormat: { type: String, default: 'auCode' },
 })
@@ -154,6 +183,7 @@ const STRINGS = {
   en: { search: 'Search expression or AU code…', results: 'Results', empty: 'No results found', copied: 'Copied', copyCode: 'Copy Code', copyPrompt: 'Copy Prompt', close: 'Close' },
 }
 const i18n = computed(() => STRINGS[props.lang] || STRINGS.zh)
+const detailVisible = computed(() => props.showDetailPanel && !!selected.value)
 
 /* ── Resolved theme ── */
 const resolvedTheme = computed(() => {
@@ -277,7 +307,7 @@ async function copyDetail(text) {
    SEARCH HEADER
 ════════════════════════════════════════ */
 .aup-header {
-  padding: 10px 10px 9px;
+  padding: 14px 14px 12px;
   border-bottom: 1px solid var(--bd);
   flex-shrink: 0;
 }
@@ -285,28 +315,28 @@ async function copyDetail(text) {
 .aup-search-box {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
   background: var(--surface);
   border: 1px solid var(--bd);
-  border-radius: 8px;
-  padding: 0 10px;
-  height: 34px;
+  border-radius: 12px;
+  padding: 0 14px;
+  height: 42px;
   cursor: text;
   transition: border-color var(--ease), box-shadow var(--ease);
 }
 .aup-search-box:focus-within {
   border-color: var(--sel-c);
-  box-shadow: 0 0 0 2.5px var(--sel-bg);
+  box-shadow: 0 0 0 3px var(--sel-bg);
 }
 
-.aup-search-ico   { font-size: 12px; color: var(--tx3); flex-shrink: 0; user-select: none; }
-.aup-search-input { flex: 1; border: none; outline: none; background: transparent; font-size: 12.5px; color: var(--tx); }
+.aup-search-ico   { font-size: 14px; color: var(--tx3); flex-shrink: 0; user-select: none; }
+.aup-search-input { flex: 1; border: none; outline: none; background: transparent; font-size: 13.5px; color: var(--tx); }
 .aup-search-input::placeholder { color: var(--tx3); }
 
 .aup-clear-btn {
   border: none; outline: none; background: transparent;
-  color: var(--tx3); cursor: pointer; padding: 0 2px;
-  font-size: 11px; line-height: 1;
+  color: var(--tx3); cursor: pointer; padding: 2px 4px;
+  font-size: 13px; line-height: 1;
   transition: color var(--ease);
 }
 .aup-clear-btn:hover { color: var(--tx); }
@@ -316,8 +346,8 @@ async function copyDetail(text) {
 ════════════════════════════════════════ */
 .aup-catbar {
   display: flex;
-  padding: 6px 8px;
-  gap: 3px;
+  padding: 10px 12px;
+  gap: 8px;
   border-bottom: 1px solid var(--bd);
   flex-shrink: 0;
   overflow-x: auto;
@@ -328,14 +358,14 @@ async function copyDetail(text) {
 .aup-cat {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 20px;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--tx2);
   cursor: pointer;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 500;
   white-space: nowrap;
   transition: all var(--ease);
@@ -344,10 +374,31 @@ async function copyDetail(text) {
 .aup-cat.active { background: var(--hov); border-color: var(--bd); color: var(--tx); }
 
 .aup-cat-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .aup-header {
+    padding: 12px 12px 10px;
+  }
+
+  .aup-search-box {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .aup-catbar {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .aup-cat {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }
 
 /* ════════════════════════════════════════
@@ -356,7 +407,7 @@ async function copyDetail(text) {
 .aup-body {
   flex: 1;
   overflow-y: auto;
-  padding: 4px 6px 10px;
+  padding: 10px 12px 18px;
   scrollbar-width: thin;
   scrollbar-color: var(--bd) transparent;
 }
@@ -369,17 +420,22 @@ async function copyDetail(text) {
 .aup-sec-hd {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 6px 5px;
-  font-size: 10.5px;
+  gap: 8px;
+  padding: 18px 6px 10px;
+  font-size: 11.5px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--tx3);
 }
+
+.aup-sec-hd:first-child {
+  padding-top: 8px;
+}
+
 .aup-sec-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -389,8 +445,20 @@ async function copyDetail(text) {
 ════════════════════════════════════════ */
 .aup-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 640px) {
+  .aup-body {
+    padding: 8px 10px 14px;
+  }
+
+  .aup-sec-hd {
+    padding: 16px 4px 9px;
+    font-size: 11px;
+  }
 }
 
 /* ════════════════════════════════════════
@@ -401,14 +469,14 @@ async function copyDetail(text) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 8px 4px 7px;
-  border-radius: 9px;
+  gap: 7px;
+  padding: 14px 12px 12px;
+  border-radius: 12px;
   border: 1.5px solid transparent;
   background: transparent;
   cursor: pointer;
   outline: none;
-  min-height: 76px;
+  min-height: 178px;
   transition: background var(--ease), border-color var(--ease), transform 0.1s ease;
 }
 .aup-item:hover  { background: var(--hov); transform: scale(1.05); }
@@ -416,12 +484,29 @@ async function copyDetail(text) {
 .aup-item.sel    { background: var(--sel-bg); border-color: var(--sel-bd); }
 
 .aup-em {
-  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 96px;
+  border-radius: 8px;
+  overflow: visible;
+  font-size: 22px;
   line-height: 1.1;
 }
 
+.aup-face {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: unset;
+  display: block;
+  border-radius: 0;
+}
+
 .aup-nm {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--tx2);
   text-align: center;
   max-width: 100%;
@@ -434,7 +519,7 @@ async function copyDetail(text) {
 
 .aup-cd {
   font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
-  font-size: 8.5px;
+  font-size: 10.5px;
   color: var(--tx3);
   text-align: center;
   max-width: 100%;
@@ -505,10 +590,28 @@ async function copyDetail(text) {
 }
 
 .aup-detail-em {
-  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  max-width: none;
+  min-height: 76px;
+  border-radius: 8px;
+  overflow: visible;
+  font-size: 30px;
   line-height: 1;
   flex-shrink: 0;
   user-select: none;
+}
+
+.aup-detail-face {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: unset;
+  display: block;
+  border-radius: 0;
 }
 
 .aup-detail-meta {
@@ -529,7 +632,7 @@ async function copyDetail(text) {
 .aup-detail-nm2 {
   font-size: 10.5px;
   color: var(--tx3);
-  margin-top: 1px;
+  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -539,7 +642,7 @@ async function copyDetail(text) {
   display: flex;
   align-items: center;
   gap: 5px;
-  margin-top: 6px;
+  margin-top: 8px;
   flex-wrap: wrap;
 }
 

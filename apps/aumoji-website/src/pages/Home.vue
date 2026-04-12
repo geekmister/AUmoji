@@ -72,8 +72,8 @@
           <AUmojiPicker
             :theme="demoTheme"
             :lang="demoLang"
-            :width="360"
-            :height="460"
+            :width="demoPickerSize.width"
+            :height="demoPickerSize.height"
             @select="onDemoSelect"
           />
           <div class="demo-controls">
@@ -87,16 +87,55 @@
         </div>
 
         <!-- Output panel -->
-        <div class="demo-output">
-          <p class="demo-output-label">😊 &nbsp;{{ lang === 'zh' ? '选择表情查看输出' : "Select an Expression" }}</p>
+        <div class="demo-output" :style="demoPanelStyle">
+          <div class="demo-output-head">
+            <p class="demo-output-label">{{ lang === 'zh' ? '完整预览面板' : 'Full Preview Panel' }}</p>
+            <p class="demo-output-sub">{{ lang === 'zh' ? '左侧选择后，这里显示该 AU 条目的完整数据' : 'Select from the picker to inspect the full AU item data here' }}</p>
+          </div>
+
           <template v-if="lastSelected">
-            <div class="output-em">{{ lastSelected.emoji }}</div>
-            <div class="output-name">{{ lastSelected.name }}</div>
-            <div class="output-name-en">{{ lastSelected.nameEn }}</div>
-            <code class="output-code-badge">{{ lastSelected.auCode }}</code>
-            <p class="output-desc">{{ lang === 'zh' ? lastSelected.descCn || lastSelected.desc : lastSelected.descEn }}</p>
+            <div class="demo-preview-hero">
+              <img
+                v-if="lastSelected.faceImg"
+                :src="lastSelected.faceImg"
+                :alt="lastSelected.name"
+                class="demo-preview-face"
+                loading="lazy"
+              />
+              <div v-else class="demo-preview-emoji">{{ lastSelected.emoji }}</div>
+              <div class="demo-preview-main">
+                <div class="output-name">{{ lastSelected.name }}</div>
+                <div class="output-name-en">{{ lastSelected.nameEn }}</div>
+                <code class="output-code-badge">{{ lastSelected.auCode }}</code>
+              </div>
+            </div>
+
+            <div class="demo-preview-fields">
+              <div
+                v-for="entry in previewEntries"
+                :key="entry.key"
+                class="demo-field"
+              >
+                <div class="demo-field-key">{{ entry.label }}</div>
+                <div class="demo-field-val">{{ entry.value }}</div>
+              </div>
+            </div>
           </template>
-          <p v-else class="output-hint">{{ lang === 'zh' ? '点击左侧表情卡片' : 'Click an expression card' }}</p>
+
+          <template v-else>
+            <div class="demo-preview-empty">
+              <img
+                src="https://picsum.photos/480/320?blur=1"
+                alt="preview placeholder"
+                class="demo-preview-placeholder"
+                loading="lazy"
+              />
+              <div class="demo-preview-empty-copy">
+                <div class="output-name">{{ lang === 'zh' ? '等待左侧选择' : 'Waiting for Selection' }}</div>
+                <p class="output-hint">{{ lang === 'zh' ? '点击左侧任意表情卡片后，这里会展示 faceImg 与完整字段数据。' : 'Choose any expression on the left and this panel will show its face image and complete data fields.' }}</p>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
     </section>
@@ -169,7 +208,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { AUmojiPicker } from 'aumoji-picker'
 import { useTheme } from '../composables/useTheme.js'
@@ -180,14 +219,97 @@ const { lang }  = useLang()
 
 // Demo picker mirrors global theme/lang but can also be overridden locally
 const demoTheme    = ref(theme.value)
-const demoLang     = ref(lang.value)
+const demoLang     = ref('zh')
+const demoPickerSize = ref({ width: 520, height: 720 })
 const lastSelected = ref(null)
 const featsRef     = ref(null)
 const installTab   = ref('npm')
 
 // Keep demo in sync with global toggles
 watch(theme, v => { demoTheme.value = v })
-watch(lang,  v => { demoLang.value  = v })
+
+const demoPanelStyle = computed(() => ({
+  width: demoPickerSize.value.width + 'px',
+  height: demoPickerSize.value.height + 'px',
+}))
+
+const FIELD_LABELS_ZH = {
+  id: 'ID',
+  name: '名称',
+  nameCn: '中文名',
+  nameEn: '英文名',
+  category: '分类',
+  subCategory: '子分类',
+  auCode: 'AU 编号',
+  auFull: 'AU 全称',
+  strength: '强度',
+  muscle: '肌肉动作',
+  conflict: '冲突项',
+  desc: '描述',
+  descCn: '中文描述',
+  descEn: '英文描述',
+  prompt: '提示词',
+  promptCn: '中文提示词',
+  promptEn: '英文提示词',
+  scene: '适用场景',
+  isMicro: '微表情',
+  icon: '图标',
+  faceImg: '示意图',
+  emoji: '表情符号',
+  pinyin: '拼音',
+  pronunciation: '发音说明',
+}
+
+const FIELD_LABELS_EN = {
+  id: 'ID',
+  name: 'Name',
+  nameCn: 'Chinese Name',
+  nameEn: 'English Name',
+  category: 'Category',
+  subCategory: 'Subcategory',
+  auCode: 'AU Code',
+  auFull: 'AU Full',
+  strength: 'Strength',
+  muscle: 'Muscle',
+  conflict: 'Conflict',
+  desc: 'Description',
+  descCn: 'Chinese Description',
+  descEn: 'English Description',
+  prompt: 'Prompt',
+  promptCn: 'Chinese Prompt',
+  promptEn: 'English Prompt',
+  scene: 'Scene',
+  isMicro: 'Micro Expression',
+  icon: 'Icon',
+  faceImg: 'Face Image',
+  emoji: 'Emoji',
+  pinyin: 'Pinyin',
+  pronunciation: 'Pronunciation',
+}
+
+const previewEntries = computed(() => {
+  if (!lastSelected.value) return []
+  const labels = lang.value === 'zh' ? FIELD_LABELS_ZH : FIELD_LABELS_EN
+  return Object.entries(lastSelected.value).map(([key, value]) => ({
+    key,
+    label: labels[key] || key,
+    value: typeof value === 'boolean' ? (value ? 'true' : 'false') : String(value || '—'),
+  }))
+})
+
+function updateDemoPickerSize() {
+  if (typeof window === 'undefined') return
+  const vw = window.innerWidth
+  if (vw < 640) {
+    demoPickerSize.value = { width: 336, height: 560 }
+    return
+  }
+  if (vw < 1100) {
+    demoPickerSize.value = { width: 420, height: 640 }
+    return
+  }
+  demoPickerSize.value = { width: 520, height: 720 }
+}
 
 const installCmds = {
   npm:  'npm install aumoji-picker',
@@ -196,6 +318,9 @@ const installCmds = {
 }
 
 onMounted(() => {
+  updateDemoPickerSize()
+  window.addEventListener('resize', updateDemoPickerSize)
+
   if (!featsRef.value) return
   const cards = Array.from(featsRef.value.querySelectorAll('.will-reveal'))
   const reveal = (el) => el.classList.add('revealed')
@@ -209,6 +334,10 @@ onMounted(() => {
       if (el.getBoundingClientRect().top < window.innerHeight - 20) reveal(el)
     })
   })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateDemoPickerSize)
 })
 
 function onDemoSelect(item) {
@@ -259,7 +388,7 @@ const usageCode = `<AUmojiPicker
   position: relative;
   overflow: hidden;
   background: var(--bg);
-  padding: 100px 20px 80px;
+  padding: var(--space-section-lg) 24px var(--space-section-md);
 }
 
 .orb {
@@ -272,7 +401,7 @@ const usageCode = `<AUmojiPicker
 
 .hero-inner {
   position: relative; z-index: 1;
-  max-width: 720px; margin: 0 auto;
+  max-width: 760px; margin: 0 auto;
   display: flex; flex-direction: column;
   align-items: center; text-align: center;
   gap: 0;
@@ -286,85 +415,227 @@ const usageCode = `<AUmojiPicker
 }
 
 .hero-sub {
-  font-size: 17px; color: var(--tx2);
-  line-height: 1.75; max-width: 540px;
-  margin-bottom: 36px;
+  font-size: 18px; color: var(--tx2);
+  line-height: 1.86;
+  max-width: 640px;
+  margin-bottom: 42px;
 }
 
 .hero-ctas {
   display: flex; flex-wrap: wrap;
-  gap: 10px; justify-content: center;
-  margin-bottom: 32px;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 36px;
 }
 
 .hero-stats {
-  display: flex; flex-wrap: wrap; gap: 8px 14px;
+  display: flex; flex-wrap: wrap; gap: 10px 16px;
   justify-content: center; align-items: center;
-  font-size: 13px; color: var(--tx3);
-  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--tx3);
+  margin-bottom: 24px;
 }
 .stat-sep { color: var(--divider); user-select: none; }
 
 .hero-badges {
   display: flex; flex-wrap: wrap;
-  gap: 6px; justify-content: center;
+  gap: 8px;
+  justify-content: center;
   min-height: 20px;
 }
 
 /* ── Demo section ── */
 .demo-section {
-  padding: 80px 20px;
+  padding: var(--space-section-md) 24px;
   background: var(--bg2);
 }
 
 .section-hd {
-  text-align: center; margin-bottom: 48px;
+  text-align: center;
+  margin-bottom: 56px;
 }
-.section-hd h2 { font-size: 28px; margin-bottom: 8px; }
-.section-hd p { color: var(--tx2); font-size: 15px; }
+.section-hd h2 {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+.section-hd p {
+  color: var(--tx2);
+  font-size: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
 
 .demo-body {
-  max-width: 860px; margin: 0 auto;
-  display: flex; flex-wrap: wrap;
-  gap: 40px; align-items: flex-start;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto auto;
   justify-content: center;
+  gap: 28px;
+  align-items: start;
 }
 
 .demo-picker-wrap {
   display: flex; flex-direction: column;
-  align-items: center; gap: 14px;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
 }
 
 .demo-controls {
-  display: flex; gap: 8px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .demo-toggle {
-  padding: 6px 16px; border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 999px;
   border: 1px solid var(--card-bd);
   background: rgba(255,255,255,0.04); color: var(--tx2);
-  font-size: 12.5px; font-weight: 500; cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
   transition: all var(--ease); font-family: inherit;
 }
 .demo-toggle:hover { border-color: var(--ac-bd); color: var(--tx); background: var(--ac-soft); }
 
 .demo-output {
-  width: 240px; min-width: 200px;
+  width: 100%;
+  min-width: 0;
   display: flex; flex-direction: column;
-  align-items: center; text-align: center;
-  gap: 10px; padding: 28px 20px;
+  align-items: stretch;
+  text-align: left;
+  gap: 16px;
+  padding: 28px 24px 24px;
   background: var(--card); border: 1px solid var(--card-bd);
-  border-radius: 16px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+@media (max-width: 1100px) {
+  .demo-body {
+    max-width: 860px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 22px;
+  }
+
+  .demo-output {
+    max-width: none;
+      align-items: center;
+      text-align: center;
+  }
+}
+
+.demo-output-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .demo-output-label {
-  font-size: 12px; font-weight: 600; color: var(--tx3);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--tx3);
   letter-spacing: 0.05em; text-transform: uppercase;
 }
 
+.demo-output-sub {
+  font-size: 13px;
+  color: var(--tx2);
+  line-height: 1.7;
+}
+
+.demo-preview-hero {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0 8px;
+}
+
+.demo-preview-face,
+.demo-preview-placeholder {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--card-bd);
+  display: block;
+}
+
+.demo-preview-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 148px;
+  border-radius: 14px;
+  border: 1px solid var(--card-bd);
+  background: var(--hover-bg);
+  font-size: 64px;
+}
+
+.demo-preview-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-preview-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.demo-field {
+  padding: 12px 14px;
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+}
+
+.demo-field-key {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--tx3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.demo-field-val {
+  font-size: 13px;
+  color: var(--tx2);
+  line-height: 1.72;
+  word-break: break-word;
+}
+
+.demo-preview-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.demo-preview-empty-copy {
+  max-width: 320px;
+  text-align: center;
+}
+
 .output-em   { font-size: 52px; line-height: 1; user-select: none; }
-.output-name { font-size: 15px; font-weight: 700; color: var(--tx); }
-.output-name-en { font-size: 12px; color: var(--tx3); margin-top: -6px; }
+.output-name { font-size: 16px; font-weight: 700; color: var(--tx); }
+.output-name-en { font-size: 13px; color: var(--tx3); margin-top: -4px; }
 
 .output-code-badge {
   font-family: ui-monospace, 'Fira Code', monospace;
@@ -375,34 +646,38 @@ const usageCode = `<AUmojiPicker
 }
 
 .output-desc {
-  font-size: 12px; color: var(--tx2); line-height: 1.55;
-  max-width: 200px;
+  font-size: 13px;
+  color: var(--tx2);
+  line-height: 1.75;
+  max-width: 240px;
 }
 
 .output-hint {
-  font-size: 13px; color: var(--tx3);
-  margin-top: 20px;
+  font-size: 14px;
+  color: var(--tx3);
+  margin-top: 16px;
+  line-height: 1.75;
 }
 
 /* ── Section layout helpers ── */
-.features-section { padding: 80px 0; }
-.qs-section { padding: 80px 0; }
+.features-section { padding: var(--space-section-md) 0; }
+.qs-section { padding: var(--space-section-sm) 0 var(--space-section-md); }
 
 .section-wrap-lg {
   max-width: 1152px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 .section-wrap-sm {
-  max-width: 768px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .feat-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 16px;
+  gap: 22px;
 }
 @media (min-width: 768px) {
   .feat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -414,16 +689,16 @@ const usageCode = `<AUmojiPicker
 .qs-steps {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 /* ── Footer ── */
 .site-footer {
   text-align: center;
-  padding: 40px 20px;
+  padding: 52px 24px;
   border-top: 1px solid var(--divider);
   color: var(--tx3);
-  font-size: 13px;
+  font-size: 14px;
 }
 .footer-link { color: var(--tx2); text-decoration: none; }
 .footer-link:hover { color: var(--tx); }
@@ -447,8 +722,10 @@ const usageCode = `<AUmojiPicker
   overflow: hidden;
 }
 .install-tab {
-  flex: 1; padding: 7px 0;
-  font-size: 12px; font-weight: 600;
+  flex: 1;
+  padding: 9px 0;
+  font-size: 12.5px;
+  font-weight: 600;
   font-family: ui-monospace, monospace;
   background: rgba(255,255,255,0.03);
   border: none; border-right: 1px solid var(--card-bd);
@@ -463,5 +740,36 @@ const usageCode = `<AUmojiPicker
   border-radius: 0 0 8px 8px !important;
   margin-top: 0 !important;
   border-top: none !important;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 84px 20px 68px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    margin-bottom: 34px;
+  }
+
+  .demo-section {
+    padding: 68px 20px;
+  }
+
+  .section-hd {
+    margin-bottom: 42px;
+  }
+
+  .section-hd h2 {
+    font-size: 27px;
+  }
+
+  .section-hd p {
+    font-size: 15px;
+  }
+
+  .demo-preview-hero {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

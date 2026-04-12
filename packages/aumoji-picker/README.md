@@ -35,8 +35,8 @@ import { AUmojiPicker } from 'aumoji-picker'
   <AUmojiPicker
     theme="dark"
     lang="zh"
-    :width="350"
-    :height="450"
+    :width="460"
+    :height="620"
     @select="(item) => console.log(item.auCode)"
   />
 </template>
@@ -50,10 +50,11 @@ import { AUmojiPicker } from 'aumoji-picker'
 |------|------|---------|-------------|
 | `theme` | `'light' \| 'dark' \| 'auto'` | `'auto'` | Color theme. `'auto'` follows system preference |
 | `lang` | `'zh' \| 'en'` | `'zh'` | UI language |
-| `width` | `Number` | `350` | Picker width in px |
-| `height` | `Number` | `450` | Picker height in px |
+| `width` | `Number` | `460` | Picker width in px |
+| `height` | `Number` | `620` | Picker height in px |
 | `defaultCategory` | `'basic' \| 'compound' \| 'micro' \| 'single'` | `'basic'` | Category shown on mount |
 | `showSearch` | `Boolean` | `true` | Show the search bar |
+| `showDetailPanel` | `Boolean` | `false` | Show the bottom detail panel after item click |
 | `copyFormat` | `'auCode' \| 'prompt' \| 'none'` | `'auCode'` | What to auto-copy on item click |
 
 ---

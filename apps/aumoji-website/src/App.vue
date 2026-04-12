@@ -56,18 +56,18 @@ const { lang, toggleLang }   = useLang()
 .nav-logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
 }
 
 .nav-link {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 12px; border-radius: 8px; font-size: 13.5px;
+  padding: 8px 14px; border-radius: 10px; font-size: 14px;
   font-weight: 500; color: var(--tx2); text-decoration: none;
   transition: color var(--ease), background var(--ease);
 }
@@ -78,9 +78,9 @@ const { lang, toggleLang }   = useLang()
 
 .nav-sep {
   width: 1px;
-  height: 16px;
+  height: 18px;
   background: var(--divider);
-  margin: 0 6px;
+  margin: 0 8px;
   flex-shrink: 0;
 }
 
@@ -88,8 +88,8 @@ const { lang, toggleLang }   = useLang()
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px; height: 34px;
-  border-radius: 8px;
+  width: 38px; height: 38px;
+  border-radius: 10px;
   border: none;
   background: transparent;
   color: var(--tx2);
@@ -109,8 +109,8 @@ const { lang, toggleLang }   = useLang()
 .nav-inner {
   max-width: 1152px;
   margin: 0 auto;
-  padding: 0 20px;
-  height: 3.5rem;
+  padding: 0 24px;
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

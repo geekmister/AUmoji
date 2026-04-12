@@ -59,6 +59,14 @@
         </div>
 
         <div class="config-group">
+          <label class="config-label">{{ lang === 'zh' ? '详情弹窗' : 'Detail Panel' }} (showDetailPanel)</label>
+          <div class="seg-ctrl">
+            <button :class="['seg-btn', cfg.showDetailPanel && 'active']" @click="cfg.showDetailPanel = true">true</button>
+            <button :class="['seg-btn', !cfg.showDetailPanel && 'active']" @click="cfg.showDetailPanel = false">false</button>
+          </div>
+        </div>
+
+        <div class="config-group">
           <label class="config-label">{{ lang === 'zh' ? '宽度' : 'Width' }} (width): {{ cfg.width }}px</label>
           <input type="range" min="280" max="500" v-model.number="cfg.width" class="range-input" />
         </div>
@@ -90,6 +98,7 @@
           :height="cfg.height"
           :default-category="cfg.defaultCategory"
           :show-search="cfg.showSearch"
+          :show-detail-panel="cfg.showDetailPanel"
           :copy-format="cfg.copyFormat"
           @select="onSelect"
         />
@@ -134,10 +143,11 @@ const { lang } = useLang()
 const DEFAULT_CFG = {
   theme: 'dark',
   lang: 'zh',
-  width: 350,
-  height: 450,
+  width: 460,
+  height: 620,
   defaultCategory: 'basic',
   showSearch: true,
+  showDetailPanel: false,
   copyFormat: 'auCode',
 }
 
@@ -175,6 +185,7 @@ const generatedCode = computed(() => {
   if (c.height !== 450)            lines.push(`  :height="${c.height}"`)
   if (c.defaultCategory !== 'basic') lines.push(`  default-category="${c.defaultCategory}"`)
   if (!c.showSearch)               lines.push(`  :show-search="false"`)
+  if (!c.showDetailPanel)          lines.push(`  :show-detail-panel="false"`)
   if (c.copyFormat !== 'auCode')   lines.push(`  copy-format="${c.copyFormat}"`)
   lines.push('  @select="handleSelect"')
   lines.push('/>')
@@ -185,32 +196,36 @@ const generatedCode = computed(() => {
 <style scoped>
 /* ── Page layout ── */
 .pg-page {
-  max-width: 1100px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 56px 24px 80px;
+  padding: 64px 28px 96px;
 }
 .pg-hd {
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 .pg-title {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 800;
   color: var(--tx);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
-.pg-sub { font-size: 15px; color: var(--tx2); }
+.pg-sub {
+  font-size: 16px;
+  color: var(--tx2);
+  line-height: 1.75;
+}
 
 .pg-body {
   display: flex;
-  gap: 32px;
+  gap: 40px;
   align-items: flex-start;
 }
 
 /* Config panel */
 .pg-config {
-  width: 300px;
+  width: 340px;
   flex-shrink: 0;
-  padding: 24px;
+  padding: 28px;
   position: sticky;
   top: 72px;
 }
@@ -222,31 +237,35 @@ const generatedCode = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* Output card */
 .pg-output {
   width: 100%;
-  max-width: 460px;
-  padding: 18px;
+  max-width: 560px;
+  padding: 22px;
 }
 
 @media (max-width: 860px) {
-  .pg-body { flex-direction: column; align-items: stretch; }
+  .pg-page {
+    padding: 52px 20px 72px;
+  }
+
+  .pg-body { flex-direction: column; align-items: stretch; gap: 26px; }
   .pg-config { width: 100%; position: static; }
   .pg-preview { align-items: stretch; }
 }
 
 .config-title { font-size:13px; font-weight:700; color:var(--tx); margin-bottom:0; }
-.config-group { margin-bottom:18px; }
-.config-label { display:block; font-size:11.5px; font-weight:600; color:var(--tx2); margin-bottom:7px; letter-spacing:0.02em; }
+.config-group { margin-bottom:22px; }
+.config-label { display:block; font-size:12.5px; font-weight:600; color:var(--tx2); margin-bottom:9px; letter-spacing:0.02em; }
 
 /* Segmented control */
 .seg-ctrl { display:flex; gap:3px; }
 .seg-btn {
-  flex:1; padding:5px 8px; border-radius:7px; border:1px solid var(--card-bd);
-  background:transparent; color:var(--tx2); font-size:11.5px; font-weight:500;
+  flex:1; padding:7px 10px; border-radius:9px; border:1px solid var(--card-bd);
+  background:transparent; color:var(--tx2); font-size:12.5px; font-weight:500;
   cursor:pointer; transition:all var(--ease); font-family:inherit;
 }
 .seg-btn:hover  { color:var(--tx); border-color:rgba(255,255,255,0.15); }

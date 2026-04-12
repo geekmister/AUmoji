@@ -1,9 +1,7 @@
 import { ref } from 'vue'
 
 // Module-level singleton — all components share the same ref
-const _lang = ref(
-  (typeof localStorage !== 'undefined' && localStorage.getItem('au-lang')) || 'zh'
-)
+const _lang = ref('zh')
 
 export function useLang() {
   function toggleLang() {
