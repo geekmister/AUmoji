@@ -1,0 +1,168 @@
+---
+// 导航栏 + 主题切换按钮
+---
+
+<header class="site-nav">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <a href="/">🎭 AUmoji</a>
+    </div>
+    
+    <nav class="nav-links">
+      <a href="/">首页 / Home</a>
+      <a href="/docs">文档 / Docs</a>
+      <a href="/playground">演示 / Playground</a>
+    </nav>
+
+    <div class="nav-right">
+      <button id="theme-btn" class="nav-icon-btn" title="切换主题">☀️</button>
+      <button id="lang-btn" class="nav-lang-btn nav-icon-btn" title="切换语言">中</button>
+      <span class="nav-sep"></span>
+      <a href="https://github.com/Geekmister/AUmoji" target="_blank" rel="noopener" class="nav-link-icon">GitHub →</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-nav {
+    background: rgba(15, 17, 27, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--divider);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background var(--ease);
+  }
+
+  [data-theme="light"] .site-nav {
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .nav-logo a {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--tx);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    flex: 1;
+  }
+
+  .nav-links a {
+    color: var(--tx2);
+    font-size: 14px;
+    transition: color var(--ease);
+  }
+
+  .nav-links a:hover {
+    color: var(--ac);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    color: var(--tx);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--ease);
+  }
+
+  .nav-icon-btn:hover {
+    background: var(--hover-bg);
+    border-color: var(--ac-bd);
+  }
+
+  .nav-sep {
+    width: 1px;
+    height: 20px;
+    background: var(--divider);
+  }
+
+  .nav-link-icon {
+    color: var(--tx2);
+    font-size: 14px;
+    transition: color var(--ease);
+  }
+
+  .nav-link-icon:hover {
+    color: var(--ac);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+    .nav-container {
+      gap: 20px;
+    }
+  }
+</style>
+
+<script>
+  // 主题切换
+  const themeBtn = document.getElementById('theme-btn')
+  const langBtn = document.getElementById('lang-btn')
+
+  function updateThemeBtn() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark'
+    if (themeBtn) {
+      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙'
+    }
+  }
+
+  function updateLangBtn() {
+    const lang = localStorage.getItem('au-lang') || 'zh'
+    if (langBtn) {
+      langBtn.textContent = lang === 'zh' ? 'EN' : '中'
+    }
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark'
+      const newTheme = theme === 'dark' ? 'light' : 'dark'
+      document.documentElement.setAttribute('data-theme', newTheme)
+      localStorage.setItem('au-theme', newTheme)
+      updateThemeBtn()
+    })
+    updateThemeBtn()
+  }
+
+  if (langBtn) {
+    langBtn.addEventListener('click', () => {
+      const lang = localStorage.getItem('au-lang') || 'zh'
+      const newLang = lang === 'zh' ? 'en' : 'zh'
+      localStorage.setItem('au-lang', newLang)
+      updateLangBtn()
+      // 刷新页面以应用语言变更（或发送自定义事件）
+      window.dispatchEvent(new CustomEvent('lang-change', { detail: { lang: newLang } }))
+    })
+    updateLangBtn()
+  }
+</script>

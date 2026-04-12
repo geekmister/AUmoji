@@ -1,0 +1,109 @@
+---
+import Main from '../layouts/Main.astro'
+import DocsComponent from '../components/Docs.vue'
+---
+
+<Main title="文档 · AUmoji">
+  <section class="docs-section">
+    <div class="container">
+      <div class="docs-layout">
+        <aside class="docs-sidebar">
+          <nav class="toc">
+            <h3>目录</h3>
+            <ul>
+              <li><a href="#reference">完整参考</a></li>
+              <li><a href="#basic">基础表情</a></li>
+              <li><a href="#compound">复合表情</a></li>
+              <li><a href="#micro">微表情</a></li>
+              <li><a href="#single">单元 AU</a></li>
+              <li><a href="#lipsync">唇形同步</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <main class="docs-content">
+          <DocsComponent client:load />
+        </main>
+      </div>
+    </div>
+  </section>
+</Main>
+
+<style>
+  .docs-section {
+    min-height: calc(100vh - 200px);
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .docs-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 40px;
+  }
+
+  .docs-sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+  }
+
+  .toc h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tx2);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc li {
+    margin-bottom: 8px;
+  }
+
+  .toc a {
+    font-size: 14px;
+    color: var(--tx2);
+    display: block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all var(--ease);
+  }
+
+  .toc a:hover {
+    background: var(--ac-soft);
+    color: var(--ac);
+  }
+
+  .docs-content {
+    min-height: 100vh;
+  }
+
+  @media (max-width: 1024px) {
+    .docs-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .docs-sidebar {
+      position: static;
+    }
+
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--card-bd);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 40px;
+    }
+  }
+</style>

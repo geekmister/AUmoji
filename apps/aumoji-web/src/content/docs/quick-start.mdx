@@ -1,0 +1,78 @@
+---
+title: 快速开始
+description: 3 分钟快速集成 AUmoji 选择器
+---
+
+# 快速开始
+
+欢迎使用 AUmoji！本指南将帮助你在 3 分钟内快速集成表情选择器。
+
+## 安装
+
+首先，在你的项目中安装 AUmoji 选择器组件：
+
+```bash
+npm install aumoji-picker
+# 或使用 pnpm
+pnpm add aumoji-picker
+```
+
+## 基础用法
+
+### Vue 3 集成
+
+在你的 Vue 组件中导入并使用：
+
+```vue
+<template>
+  <div>
+    <AUmojiPicker />
+  </div>
+</template>
+
+<script setup>
+import AUmojiPicker from 'aumoji-picker'
+import 'aumoji-picker/dist/style.css'
+</script>
+```
+
+### 数据导出
+
+获取完整的 AU 表情数据：
+
+```javascript
+import { expressions, categories } from 'aumoji-data'
+
+console.log(expressions) // 31 个表情
+console.log(categories)  // 5 个分类
+```
+
+## 常见用途
+
+### 1. 搜索特定表情
+
+```javascript
+import { expressions } from 'aumoji-data'
+
+const realSmile = expressions.find(au => au.id === 'AU06')
+console.log(realSmile.name_cn) // "真笑"
+```
+
+### 2. 按分类筛选
+
+```javascript
+const basicEmotions = expressions.filter(au => au.category === 'basic')
+```
+
+### 3. 获取提示词
+
+```javascript
+const au = expressions[0]
+console.log(au.prompt_zh) // 可用于 AI 模型
+```
+
+## 下一步
+
+- 📖 查看 [完整文档](/docs)
+- 🎮 尝试 [互动演示](/playground)
+- 📚 阅读 [FACS 学习指南](/docs/facs-guide)

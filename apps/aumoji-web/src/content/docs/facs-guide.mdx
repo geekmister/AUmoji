@@ -1,0 +1,80 @@
+---
+title: FACS 101 — 学习指南
+description: 面部表情编码系统基础知识
+---
+
+# FACS 101: Facial Action Coding System
+
+## 什么是 FACS？
+
+**面部表情编码系统 (Facial Action Coding System, 简称 FACS)** 是由 Paul Ekman 和 Wallace Friesen 在 1978 年开发的一套标准化系统，用于描述和分类人类面部的肌肉运动。
+
+## 核心概念
+
+### Action Unit (AU) — 表情单元
+
+每个 AU 代表一个特定的面部肌肉或肌肉组的收缩。例如：
+
+- **AU01** — 眉毛内侧上扬 (Inner Brow Raiser)
+- **AU12** — 嘴角上扬 (Lip Corner Puller)
+
+### 编码系统
+
+FACS 使用数字编号标识各个 AU，范围从 AU01 到 AU64+。每个 AU 都有：
+
+- **代码** — 数字标识
+- **名称** — 英文描述
+- **肌肉** — 涉及的面部肌肉
+- **描述** — 详细的动作说明
+
+### 强度等级 (Intensity)
+
+每个 AU 可以分为 5 个强度等级：
+
+- **A** — 迹象 (Trace)
+- **B** — 轻微 (Slight)
+- **C** — 明显 (Marked)
+- **D** — 严重 (Severe)
+- **E** — 极端 (Extreme)
+
+## 应用领域
+
+### 1. 心理学与人工智能
+
+- 识别虚假表情
+- 情感识别算法训练
+- 微表情分析
+
+### 2. 动画与影视
+
+- 角色表情设计
+- 动捕数据标注
+- 表演指导
+
+### 3. 交互设计
+
+- 虚拟化身 (Avatar) 表情
+- 游戏角色表演
+- VR/AR 应用
+
+## AUmoji 中的 FACS
+
+我们的数据集包含了 31 个常用的 AU 组合，分为：
+
+| 类别 | 数量 | 用途 |
+|------|------|------|
+| 基础表情 | 8 | 六种基本情绪 + 中性 |
+| 复合表情 | 6 | 多个 AU 的组合 |
+| 微表情 | 4 | 隐藏情绪的泄露 |
+| 单元 AU | 8 | 单个肌肉动作 |
+| 唇形同步 | 5 | 语音配合 |
+
+## 进阶阅读
+
+- 📚 原始论文: Ekman & Friesen (1978) — Facial Action Coding System
+- 🎓 在线课程: Microexpression Online Training
+- 🔬 研究: Emotion & Expression Recognition with Deep Learning
+
+---
+
+**想要深入学习？** 查看我们的 [完整参考表](/docs/au-reference)

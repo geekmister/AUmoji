@@ -1,0 +1,236 @@
+---
+import Main from '../layouts/Main.astro'
+---
+
+<Main title="首页 · AUmoji">
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">🎭 AUmoji</h1>
+      <p class="hero-subtitle">影视级 FACS 表情选择器 <br /> Professional Facial Action Unit Picker for Film & Animation</p>
+      <div class="hero-btns">
+        <a href="/playground" class="btn btn-primary">开始探索 →</a>
+        <a href="/docs" class="btn btn-secondary">查看文档</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">31</div>
+          <div class="stat-label">AU 表情</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">5</div>
+          <div class="stat-label">分类</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8+ 种</div>
+          <div class="stat-label">语言</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2>核心功能</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>完整数据集</h3>
+          <p>31 个标准 FACS 表情单元，涵盖基础、复合、微表情及单元分类</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3>多语言支持</h3>
+          <p>中英文双语支持，准确的学术术语及业界标准定义</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>主题系统</h3>
+          <p>深色/浅色模式自适应，符合现代设计审美</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>高性能</h3>
+          <p>优化的打包体积，无依赖轻量级集成</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>开始使用</h2>
+      <p>集成 AUmoji 选择器到你的项目中，3 分钟快速上手</p>
+      <a href="/docs" class="btn btn-primary">查看集成指南</a>
+    </div>
+  </section>
+</Main>
+
+<style>
+  .hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--ac), var(--ac2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--tx2);
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 80px;
+  }
+
+  .btn {
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all var(--ease);
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--ac);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--ac2);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.3);
+  }
+
+  .btn-secondary {
+    background: var(--card);
+    color: var(--tx);
+    border: 1px solid var(--card-bd);
+  }
+
+  .btn-secondary:hover {
+    background: var(--hover-bg);
+    border-color: var(--ac-bd);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ac);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--tx2);
+  }
+
+  .features {
+    padding: 80px 20px;
+    background: var(--card);
+  }
+
+  .features h2 {
+    text-align: center;
+    margin-bottom: 48px;
+    font-size: 2.5rem;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all var(--ease);
+  }
+
+  .feature-card:hover {
+    border-color: var(--ac-bd);
+    background: rgba(124, 58, 237, 0.05);
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h3 {
+    margin-bottom: 12px;
+  }
+
+  .feature-card p {
+    font-size: 0.95rem;
+    color: var(--tx2);
+    margin-bottom: 0;
+  }
+
+  .cta {
+    padding: 80px 20px;
+    text-align: center;
+  }
+
+  .cta h2 {
+    margin-bottom: 16px;
+    font-size: 2rem;
+  }
+
+  .cta p {
+    font-size: 1.1rem;
+    color: var(--tx2);
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .hero-btns {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-stats {
+      gap: 24px;
+    }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+export interface Props {
+  title?: string
+  description?: string
+}
+
+const { title = '© 2025 AUmoji', description = 'Built with ❤️ for AI creators' } = Astro.props
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="footer-title">{title}</p>
+    <p class="footer-desc">{description}</p>
+    <p class="footer-links">
+      <a href="https://github.com/Geekmister/AUmoji" target="_blank" rel="noopener">GitHub</a>
+      <span>·</span>
+      <a href="/docs">Docs</a>
+      <span>·</span>
+      <a href="https://github.com/Geekmister/AUmoji/blob/main/LICENSE" target="_blank">MIT License</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--card);
+    border-top: 1px solid var(--divider);
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: 80px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--tx);
+    margin-bottom: 8px;
+  }
+
+  .footer-desc {
+    font-size: 14px;
+    color: var(--tx2);
+    margin-bottom: 12px;
+  }
+
+  .footer-links {
+    font-size: 13px;
+    color: var(--tx3);
+  }
+
+  .footer-links a {
+    color: var(--ac);
+    transition: color var(--ease);
+  }
+
+  .footer-links a:hover {
+    color: var(--ac2);
+  }
+
+  .footer-links span {
+    margin: 0 8px;
+  }
+</style>

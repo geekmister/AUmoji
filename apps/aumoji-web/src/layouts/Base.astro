@@ -1,0 +1,30 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title = 'AUmoji', description = '影视级 FACS 表情选择器' } = Astro.props as Props
+---
+
+<!doctype html>
+<html lang="zh" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} — AUmoji</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style>
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+</style>
