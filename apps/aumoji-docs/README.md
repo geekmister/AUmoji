@@ -13,7 +13,7 @@ pnpm install
 ### 开发模式
 
 ```bash
-cd apps/aumoji-web
+cd apps/aumoji-docs
 pnpm dev
 ```
 
@@ -76,7 +76,7 @@ src/
 ## 集成的依赖
 
 - `aumoji-picker` — 表情选择器组件
-- `aumoji-data` — 31 个表情数据源
+- 本地数据源 — `src/data/auData.js`
 
 ## 部署到 GitHub Pages
 

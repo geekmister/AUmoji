@@ -20,8 +20,7 @@ AUmoji.git/
 │   └── deploy.yml         ✨ Astro 自动部署到 GitHub Pages
 │
 ├── packages/
-│   ├── aumoji-data/       # 31 个表情数据源（单一数据源）
-│   └── aumoji-picker/     # 可复用的选择器组件
+│   └── aumoji-picker/     # 可复用的选择器组件（内置数据）
 │
 ├── apps/
 │   ├── website/           ⚠️ 旧的 Vite Vue 项目（已弃用）

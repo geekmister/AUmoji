@@ -177,33 +177,29 @@ graph TD
 ```
 aumoji/                           ← Monorepo root (pnpm workspace)
 ├── packages/
-│   ├── aumoji-data/              ← 📦 Shared data source (single source of truth)
-│   │   ├── index.js              ←   AU_DATA + CATEGORIES (25 expressions)
-│   │   └── package.json
 │   └── aumoji-picker/            ← 📦 Vue 3 component package
 │       ├── src/
 │       │   ├── AUmojiPicker.vue  ←   Main component
 │       │   ├── index.js          ←   Public API exports
 │       │   └── constants/
-│       │       └── auData.js     ←   Re-exports from aumoji-data
-│       └── package.json          ←   depends on aumoji-data
+│       │       └── auData.js     ←   Local data source
+│       └── package.json
 └── apps/
     └── website/                  ← 🌐 Documentation website
         ├── src/
-        │   ├── pages/            ←   Home / Docs / Playground
+   │   ├── data/             ←   Local data source
+   │   ├── pages/            ←   Home / Docs / Playground
         │   └── composables/      ←   useTheme / useLang (global state)
-        └── package.json          ←   depends on aumoji-data + aumoji-picker
+   └── package.json          ←   depends on aumoji-picker
 ```
 
 **Data flow:**
 ```
-aumoji-data (index.js)
-       │
-       ├──► aumoji-picker (re-exports AU_DATA, CATEGORIES via its index.js)
-       │           │
-       │           └──► User's app: import { AUmojiPicker, AU_DATA } from 'aumoji-picker'
-       │
-       └──► aumoji-website: import { AU_DATA } from 'aumoji-data'  (direct access)
+aumoji-picker/src/constants/auData.js  (picker local source)
+  │
+  └──► User's app: import { AUmojiPicker, AU_DATA } from 'aumoji-picker'
+
+apps/aumoji-website/src/data/auData.js  (website local source)
 ```
 
 ---
@@ -251,8 +247,6 @@ function onSelect(item) {
 
 ```js
 // Full data access (for custom UI, search, etc.)
-import { AU_DATA, CATEGORIES } from 'aumoji-data'
-// or
 import { AU_DATA, CATEGORIES } from 'aumoji-picker'
 
 const allExpressions = Object.values(AU_DATA).flat()  // 25 items
@@ -375,12 +369,6 @@ AUmoji covers the **most cinematically significant** subset used in:
 ## 🗂️ Package Structure
 
 ```
-packages/aumoji-data/     ← Single source of truth
-                              AU_DATA: 25 expressions
-                              CATEGORIES: 4 types
-                              fully bilingual (zh/en)
-                              rich metadata (muscle, scene, conflict)
-
 packages/aumoji-picker/   ← Vue 3 UI component
                               <AUmojiPicker> SFC
                               search, category nav, copy-on-click
