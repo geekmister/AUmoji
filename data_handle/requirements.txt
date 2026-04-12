@@ -1,0 +1,7 @@
+diffusers 
+transformers 
+torch 
+accelerate 
+rembg 
+pillow
+huggingface_hub

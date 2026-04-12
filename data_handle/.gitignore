@@ -1,0 +1,18 @@
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Local tooling cache
+.pytest_cache/
+.mypy_cache/
+
+# Generated assets
+au_schematics/
+
+# macOS
+.DS_Store
