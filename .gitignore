@@ -38,3 +38,6 @@ pnpm-debug.log*
 
 # OS
 Thumbs.db
+
+# Astro generated files
+apps/aumoji-docs/.astro/
