@@ -88,25 +88,95 @@
 
         <!-- Output panel -->
         <div class="demo-output" :style="demoPanelStyle">
+          <div class="demo-output-glow"></div>
           <div class="demo-output-head">
-            <p class="demo-output-label">{{ lang === 'zh' ? '完整预览面板' : 'Full Preview Panel' }}</p>
-            <p class="demo-output-sub">{{ lang === 'zh' ? '左侧选择后，这里显示该 AU 条目的完整数据' : 'Select from the picker to inspect the full AU item data here' }}</p>
+            <p class="demo-output-label">
+              <span class="demo-output-dot"></span>
+              {{ lang === 'zh' ? '完整预览' : 'Full Preview' }}
+            </p>
+            <p class="demo-output-sub">{{ lang === 'zh' ? '左侧选择后，这里显示该表情的所有信息，可以快速查看描述、中/英文提示词。' : 'After selecting from the left, this panel shows all key details of the expression, including description and CN/EN prompts.' }}</p>
           </div>
 
           <template v-if="lastSelected">
             <div class="demo-preview-hero">
-              <img
-                v-if="lastSelected.faceImg"
-                :src="lastSelected.faceImg"
-                :alt="lastSelected.name"
-                class="demo-preview-face"
-                loading="lazy"
-              />
-              <div v-else class="demo-preview-emoji">{{ lastSelected.emoji }}</div>
+              <div v-if="lastSelected.faceImg" class="demo-preview-media">
+                <img
+                  :src="lastSelected.faceImg"
+                  :alt="displayName"
+                  class="demo-preview-face"
+                  loading="lazy"
+                  @click="openImageViewer(lastSelected.faceImg, displayName)"
+                />
+                <button
+                  class="demo-preview-view-btn"
+                  type="button"
+                  @click="openImageViewer(lastSelected.faceImg, displayName)"
+                >
+                  {{ lang === 'zh' ? '查看原图' : 'View Original' }}
+                </button>
+              </div>
+              <div v-else class="demo-preview-emoji">{{ lastSelected.emoji || '🙂' }}</div>
               <div class="demo-preview-main">
-                <div class="output-name">{{ lastSelected.name }}</div>
-                <div class="output-name-en">{{ lastSelected.nameEn }}</div>
+                <div class="output-name">{{ displayName }}</div>
                 <code class="output-code-badge">{{ lastSelected.auCode }}</code>
+                <div class="demo-preview-tag">{{ lastSelected.category || 'AU' }}</div>
+              </div>
+            </div>
+
+            <div class="demo-info-layout">
+              <div class="demo-copy-assist demo-info-panel">
+                <div class="demo-copy-title">{{ lang === 'zh' ? '描述与提示词' : 'Description & Prompts' }}</div>
+                <p class="demo-copy-desc">{{ displayDesc }}</p>
+                <div class="demo-prompt-grid">
+                  <div class="demo-prompt-card">
+                    <div class="demo-prompt-head">
+                      <div class="demo-prompt-label">{{ lang === 'zh' ? '中文提示词' : 'Prompt (ZH)' }}</div>
+                      <button
+                        class="demo-prompt-copy"
+                        type="button"
+                        @click="copyPrompt('zh', promptCnText)"
+                      >
+                        {{ copiedPrompt === 'zh' ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy') }}
+                      </button>
+                    </div>
+                    <p class="demo-prompt-text">{{ promptCnText }}</p>
+                  </div>
+                  <div class="demo-prompt-card">
+                    <div class="demo-prompt-head">
+                      <div class="demo-prompt-label">{{ lang === 'zh' ? '英文提示词' : 'Prompt (EN)' }}</div>
+                      <button
+                        class="demo-prompt-copy"
+                        type="button"
+                        @click="copyPrompt('en', promptEnText)"
+                      >
+                        {{ copiedPrompt === 'en' ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy') }}
+                      </button>
+                    </div>
+                    <p class="demo-prompt-text">{{ promptEnText }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="demo-info-panel demo-core-panel">
+                <div class="demo-copy-title">{{ lang === 'zh' ? '核心参数' : 'Core Specs' }}</div>
+                <div class="demo-core-grid">
+                  <div class="demo-core-item">
+                    <div class="demo-core-label">{{ lang === 'zh' ? 'AU 全称' : 'AU Full' }}</div>
+                    <div class="demo-core-value">{{ displayAuFull }}</div>
+                  </div>
+                  <div class="demo-core-item">
+                    <div class="demo-core-label">{{ lang === 'zh' ? '强度' : 'Strength' }}</div>
+                    <div class="demo-core-value">{{ displayStrength }}</div>
+                  </div>
+                  <div class="demo-core-item">
+                    <div class="demo-core-label">{{ lang === 'zh' ? '肌肉动作' : 'Muscle' }}</div>
+                    <div class="demo-core-value">{{ displayMuscle }}</div>
+                  </div>
+                  <div class="demo-core-item">
+                    <div class="demo-core-label">{{ lang === 'zh' ? '适用场景' : 'Scene' }}</div>
+                    <div class="demo-core-value">{{ displayScene }}</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -125,14 +195,14 @@
           <template v-else>
             <div class="demo-preview-empty">
               <img
-                src="https://picsum.photos/480/320?blur=1"
+                src="/img/preview-empty-illustration.svg"
                 alt="preview placeholder"
                 class="demo-preview-placeholder"
                 loading="lazy"
               />
               <div class="demo-preview-empty-copy">
                 <div class="output-name">{{ lang === 'zh' ? '等待左侧选择' : 'Waiting for Selection' }}</div>
-                <p class="output-hint">{{ lang === 'zh' ? '点击左侧任意表情卡片后，这里会展示 faceImg 与完整字段数据。' : 'Choose any expression on the left and this panel will show its face image and complete data fields.' }}</p>
+                <p class="output-hint">{{ lang === 'zh' ? '点击左侧任意表情后，这里会展示该表情的关键信息，并可快速查看描述与中/英文提示词。' : 'Pick any expression on the left to view key details, plus description and CN/EN prompts.' }}</p>
               </div>
             </div>
           </template>
@@ -166,6 +236,15 @@
     </section>
 
     <div class="section-divider"></div>
+
+    <transition name="img-viewer">
+      <div v-if="imageViewerOpen" class="img-viewer" @click="closeImageViewer">
+        <div class="img-viewer-inner" @click.stop>
+          <button class="img-viewer-close" type="button" @click="closeImageViewer">✕</button>
+          <img :src="viewerImageSrc" :alt="viewerImageAlt" class="img-viewer-img" loading="lazy" />
+        </div>
+      </div>
+    </transition>
 
     <!-- ══ QUICK START ══ -->
     <section class="qs-section">
@@ -222,6 +301,10 @@ const demoTheme    = ref(theme.value)
 const demoLang     = ref('zh')
 const demoPickerSize = ref({ width: 520, height: 720 })
 const lastSelected = ref(null)
+const copiedPrompt = ref('')
+const imageViewerOpen = ref(false)
+const viewerImageSrc = ref('')
+const viewerImageAlt = ref('preview image')
 const featsRef     = ref(null)
 const installTab   = ref('npm')
 
@@ -287,14 +370,83 @@ const FIELD_LABELS_EN = {
   pronunciation: 'Pronunciation',
 }
 
+const HIDDEN_FIELD_KEYS = new Set([
+  'id',
+  'subCategory',
+  'isMicro',
+  'icon',
+  'faceImg',
+  'emoji',
+  'prompt',
+  'promptCn',
+  'promptEn',
+  'scene',
+])
+
+const displayName = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return lang.value === 'zh'
+    ? (item.nameCn || item.name || item.nameEn || '—')
+    : (item.nameEn || item.name || item.nameCn || '—')
+})
+
+const displayDesc = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return lang.value === 'zh'
+    ? (item.descCn || item.desc || item.descEn || '—')
+    : (item.descEn || item.desc || item.descCn || '—')
+})
+
+const displayScene = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.scene || '—'
+})
+
+const displayAuFull = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.auFull || item.auCode || '—'
+})
+
+const displayStrength = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.strength || '—'
+})
+
+const displayMuscle = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.muscle || '—'
+})
+
+const promptCnText = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.promptCn || item.prompt || '—'
+})
+
+const promptEnText = computed(() => {
+  const item = lastSelected.value
+  if (!item) return '—'
+  return item.promptEn || item.prompt || '—'
+})
+
 const previewEntries = computed(() => {
   if (!lastSelected.value) return []
   const labels = lang.value === 'zh' ? FIELD_LABELS_ZH : FIELD_LABELS_EN
-  return Object.entries(lastSelected.value).map(([key, value]) => ({
-    key,
-    label: labels[key] || key,
-    value: typeof value === 'boolean' ? (value ? 'true' : 'false') : String(value || '—'),
-  }))
+  return Object.entries(lastSelected.value)
+    .filter(([key]) => !HIDDEN_FIELD_KEYS.has(key))
+    .map(([key, value]) => ({
+      key,
+      label: labels[key] || key,
+      value: typeof value === 'boolean'
+        ? (lang.value === 'zh' ? (value ? '是' : '否') : (value ? 'true' : 'false'))
+        : String(value || '—'),
+    }))
 })
 
 function updateDemoPickerSize() {
@@ -320,6 +472,7 @@ const installCmds = {
 onMounted(() => {
   updateDemoPickerSize()
   window.addEventListener('resize', updateDemoPickerSize)
+  window.addEventListener('keydown', onPageKeydown)
 
   if (!featsRef.value) return
   const cards = Array.from(featsRef.value.querySelectorAll('.will-reveal'))
@@ -338,10 +491,56 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateDemoPickerSize)
+  window.removeEventListener('keydown', onPageKeydown)
 })
 
 function onDemoSelect(item) {
   lastSelected.value = item
+}
+
+function openImageViewer(src, altText) {
+  if (!src) return
+  viewerImageSrc.value = src
+  viewerImageAlt.value = altText || 'preview image'
+  imageViewerOpen.value = true
+}
+
+function closeImageViewer() {
+  imageViewerOpen.value = false
+}
+
+function onPageKeydown(event) {
+  if (event.key === 'Escape' && imageViewerOpen.value) {
+    closeImageViewer()
+  }
+}
+
+async function copyPrompt(kind, text) {
+  const content = String(text || '').trim()
+  if (!content || content === '—') return
+
+  try {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(content)
+    } else {
+      const textarea = document.createElement('textarea')
+      textarea.value = content
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'absolute'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+
+    copiedPrompt.value = kind
+    setTimeout(() => {
+      if (copiedPrompt.value === kind) copiedPrompt.value = ''
+    }, 1200)
+  } catch {
+    copiedPrompt.value = ''
+  }
 }
 
 const features = [
@@ -510,9 +709,18 @@ const usageCode = `<AUmojiPicker
   text-align: left;
   gap: 16px;
   padding: 28px 24px 24px;
-  background: var(--card); border: 1px solid var(--card-bd);
-  border-radius: 18px;
-  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(14,165,233,0.16), transparent 42%),
+    radial-gradient(120% 120% at 0% 100%, rgba(244,114,182,0.14), transparent 38%),
+    var(--card);
+  border: 1px solid color-mix(in srgb, var(--card-bd) 70%, rgba(148,163,184,0.45));
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 16px 40px rgba(2,6,23,0.26);
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
 }
 
 @media (max-width: 1100px) {
@@ -534,13 +742,38 @@ const usageCode = `<AUmojiPicker
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed color-mix(in srgb, var(--card-bd) 82%, rgba(148,163,184,0.22));
+}
+
+.demo-output-glow {
+  position: absolute;
+  top: -26px;
+  right: -26px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,189,248,0.32), rgba(56,189,248,0));
+  pointer-events: none;
 }
 
 .demo-output-label {
   font-size: 12.5px;
   font-weight: 600;
   color: var(--tx3);
-  letter-spacing: 0.05em; text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-output-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(120deg, #38bdf8, #818cf8);
+  box-shadow: 0 0 10px rgba(56,189,248,0.8);
 }
 
 .demo-output-sub {
@@ -550,33 +783,74 @@ const usageCode = `<AUmojiPicker
 }
 
 .demo-preview-hero {
-  display: grid;
-  grid-template-columns: 148px minmax(0, 1fr);
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 86%, rgba(148,163,184,0.2));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 82%, rgba(15,23,42,0.26));
+}
+
+.demo-preview-media {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 240px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 76%, rgba(148,163,184,0.24));
+  background: color-mix(in srgb, var(--bg2) 72%, transparent);
+  display: flex;
   align-items: center;
-  padding: 14px 0 8px;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .demo-preview-face,
 .demo-preview-placeholder {
   width: 100%;
-  height: auto;
-  max-height: 180px;
-  object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid var(--card-bd);
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
   display: block;
+}
+
+.demo-preview-face {
+  cursor: zoom-in;
+}
+
+.demo-preview-view-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 74%, rgba(148,163,184,0.22));
+  background: rgba(15, 23, 42, 0.68);
+  color: #f8fafc;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: opacity var(--ease), transform var(--ease);
+}
+
+.demo-preview-view-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .demo-preview-emoji {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 148px;
-  border-radius: 14px;
-  border: 1px solid var(--card-bd);
-  background: var(--hover-bg);
-  font-size: 64px;
+  width: 100%;
+  min-width: 0;
+  height: 240px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 76%, rgba(148,163,184,0.24));
+  background: color-mix(in srgb, var(--bg2) 72%, transparent);
+  font-size: 88px;
 }
 
 .demo-preview-main {
@@ -586,26 +860,171 @@ const usageCode = `<AUmojiPicker
   gap: 8px;
 }
 
+.demo-info-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.demo-info-panel {
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 78%, rgba(148,163,184,0.24));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card) 88%, rgba(15,23,42,0.2));
+}
+
+.demo-copy-assist {
+  min-width: 0;
+}
+
+.demo-core-panel {
+  min-width: 0;
+}
+
+.demo-copy-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--tx3) 82%, #38bdf8 18%);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.demo-copy-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.72;
+  color: var(--tx2);
+}
+
+.demo-core-grid {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.demo-core-item {
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 80%, rgba(148,163,184,0.24));
+  background: color-mix(in srgb, var(--bg2) 72%, transparent);
+}
+
+.demo-core-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tx3);
+  letter-spacing: 0.03em;
+}
+
+.demo-core-value {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.66;
+  color: var(--tx2);
+  word-break: break-word;
+}
+
+.demo-prompt-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.demo-prompt-card {
+  padding: 10px 11px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 80%, rgba(148,163,184,0.24));
+  background: color-mix(in srgb, var(--bg2) 72%, transparent);
+}
+
+.demo-prompt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.demo-prompt-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tx3);
+  letter-spacing: 0.03em;
+}
+
+.demo-prompt-copy {
+  border: 1px solid color-mix(in srgb, var(--card-bd) 80%, rgba(148,163,184,0.28));
+  background: color-mix(in srgb, var(--card) 86%, rgba(15,23,42,0.18));
+  color: var(--tx2);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--ease), color var(--ease), background var(--ease);
+}
+
+.demo-prompt-copy:hover {
+  border-color: var(--ac-bd);
+  color: var(--tx);
+  background: var(--ac-soft);
+}
+
+.demo-prompt-text {
+  margin-top: 5px;
+  font-size: 12.5px;
+  line-height: 1.66;
+  color: var(--tx2);
+  word-break: break-word;
+}
+
+.demo-preview-tag {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f8fafc;
+  background: linear-gradient(120deg, #0ea5e9, #6366f1);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
 .demo-preview-fields {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
   min-height: 0;
   overflow: auto;
-  padding-right: 2px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--card-bd) 80%, rgba(148,163,184,0.55)) transparent;
+}
+
+.demo-preview-fields::-webkit-scrollbar {
+  width: 6px;
+}
+
+.demo-preview-fields::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--card-bd) 80%, rgba(148,163,184,0.55));
 }
 
 .demo-field {
-  padding: 12px 14px;
-  border: 1px solid var(--card-bd);
+  padding: 12px 14px 13px;
+  border: 1px solid color-mix(in srgb, var(--card-bd) 76%, rgba(148,163,184,0.28));
   border-radius: 14px;
-  background: rgba(255,255,255,0.02);
+  background:
+    linear-gradient(120deg, rgba(255,255,255,0.015), rgba(255,255,255,0.04)),
+    rgba(255,255,255,0.01);
 }
 
 .demo-field-key {
   font-size: 11.5px;
   font-weight: 700;
-  color: var(--tx3);
+  color: color-mix(in srgb, var(--tx3) 84%, #60a5fa 16%);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-bottom: 6px;
@@ -626,6 +1045,9 @@ const usageCode = `<AUmojiPicker
   justify-content: center;
   flex: 1;
   min-height: 0;
+  padding: 14px;
+  border: 1px dashed color-mix(in srgb, var(--card-bd) 70%, rgba(148,163,184,0.35));
+  border-radius: 16px;
 }
 
 .demo-preview-empty-copy {
@@ -635,7 +1057,6 @@ const usageCode = `<AUmojiPicker
 
 .output-em   { font-size: 52px; line-height: 1; user-select: none; }
 .output-name { font-size: 16px; font-weight: 700; color: var(--tx); }
-.output-name-en { font-size: 13px; color: var(--tx3); margin-top: -4px; }
 
 .output-code-badge {
   font-family: ui-monospace, 'Fira Code', monospace;
@@ -699,6 +1120,60 @@ const usageCode = `<AUmojiPicker
   border-top: 1px solid var(--divider);
   color: var(--tx3);
   font-size: 14px;
+}
+
+.img-viewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+  padding: 24px;
+}
+
+.img-viewer-inner {
+  position: relative;
+  width: min(92vw, 1120px);
+  max-height: 92vh;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 18px 44px rgba(2, 6, 23, 0.48);
+}
+
+.img-viewer-img {
+  width: 100%;
+  max-height: 92vh;
+  object-fit: contain;
+  display: block;
+}
+
+.img-viewer-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.72);
+  color: #f8fafc;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.img-viewer-enter-active,
+.img-viewer-leave-active {
+  transition: opacity 0.18s ease;
+}
+
+.img-viewer-enter-from,
+.img-viewer-leave-to {
+  opacity: 0;
 }
 .footer-link { color: var(--tx2); text-decoration: none; }
 .footer-link:hover { color: var(--tx); }
@@ -769,7 +1244,15 @@ const usageCode = `<AUmojiPicker
   }
 
   .demo-preview-hero {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .demo-preview-media,
+  .demo-preview-emoji {
+    width: 100%;
+    min-width: 0;
+    height: 200px;
   }
 }
 </style>

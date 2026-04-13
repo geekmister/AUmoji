@@ -101,6 +101,11 @@
               <span class="aup-cd">{{ item.auCode }}</span>
             </button>
           </div>
+          <div v-if="!(AU_DATA[cat.type] && AU_DATA[cat.type].length)" class="aup-empty-pro">
+            <img :src="emptyProIllustration" alt="pro empty" class="aup-empty-pro-img" loading="lazy" />
+            <p class="aup-empty-pro-title">{{ lang === 'zh' ? '内容筹备中' : 'Content In Progress' }}</p>
+            <p class="aup-empty-pro-desc">{{ lang === 'zh' ? '复合表情与微表情正在整理中，后续版本开放。' : 'Compound and micro expressions are being prepared for upcoming releases.' }}</p>
+          </div>
         </template>
       </template>
 
@@ -146,6 +151,7 @@
 import { ref, computed, reactive } from 'vue'
 import { AU_DATA, CATEGORIES } from './constants/auData.js'
 import { copyToClipboard } from './utils/copy.js'
+import emptyProIllustration from './assets/empty-pro.svg'
 
 /* ── Props ── */
 const props = defineProps({
@@ -218,13 +224,24 @@ function onScroll() {
   const body = bodyRef.value
   if (!body) return
   const scrollTop = body.scrollTop
-  for (const cat of [...CATEGORIES].reverse()) {
+
+  // Keep active category in sync with the section nearest to the viewport top.
+  if (scrollTop + body.clientHeight >= body.scrollHeight - 8) {
+    activeCategory.value = CATEGORIES[CATEGORIES.length - 1]?.type || activeCategory.value
+    return
+  }
+
+  const threshold = scrollTop + Math.max(56, body.clientHeight * 0.18)
+  let current = CATEGORIES[0]?.type || activeCategory.value
+
+  for (const cat of CATEGORIES) {
     const el = secRefs[cat.type]
-    if (el && el.offsetTop <= scrollTop + 50) {
-      activeCategory.value = cat.type
-      break
+    if (el && el.offsetTop <= threshold) {
+      current = cat.type
     }
   }
+
+  activeCategory.value = current
 }
 
 /* ── Pick an item ── */
@@ -469,14 +486,14 @@ async function copyDetail(text) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 14px 12px 12px;
+  gap: 8px;
+  padding: 12px 12px 11px;
   border-radius: 12px;
   border: 1.5px solid transparent;
   background: transparent;
   cursor: pointer;
   outline: none;
-  min-height: 190px;
+  min-height: 206px;
   transition: background var(--ease), border-color var(--ease), transform 0.1s ease;
 }
 .aup-item:hover  { background: var(--hov); transform: scale(1.05); }
@@ -488,10 +505,10 @@ async function copyDetail(text) {
   align-items: center;
   justify-content: center;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  min-height: 92px;
-  max-height: 112px;
-  border-radius: 10px;
+  aspect-ratio: 3 / 2;
+  min-height: 112px;
+  max-height: 136px;
+  border-radius: 12px;
   overflow: hidden;
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   font-size: 22px;
@@ -501,7 +518,7 @@ async function copyDetail(text) {
 .aup-face {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   border-radius: 0;
 }
@@ -542,6 +559,40 @@ async function copyDetail(text) {
   font-size: 13px;
   color: var(--tx3);
   gap: 8px;
+}
+
+.aup-empty-pro {
+  margin: 2px 0 8px;
+  padding: 14px 12px 16px;
+  border: 1px dashed var(--bd);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.aup-empty-pro-img {
+  width: 100%;
+  max-width: 210px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.aup-empty-pro-title {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.aup-empty-pro-desc {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--tx3);
+  max-width: 230px;
 }
 
 /* ════════════════════════════════════════
@@ -608,7 +659,7 @@ async function copyDetail(text) {
 .aup-detail-face {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   border-radius: 0;
 }
