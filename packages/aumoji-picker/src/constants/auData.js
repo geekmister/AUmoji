@@ -18,7 +18,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "影视特写/日常剧情/数字人",
       "isMicro": false,
       "icon": "fa-regular fa-face-laugh-squint",
-      "faceImg": "../../public/img/face/basic_001.png"
+      "faceImg": "/img/face/basic_001.png"
     },
     {
       "id": "basic_002",
@@ -38,7 +38,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "职场社交/商务镜头/短视频",
       "isMicro": false,
       "icon": "fa-regular fa-face-smile",
-      "faceImg": "../../public/img/face/basic_002.png"
+      "faceImg": "/img/face/basic_002.png"
     },
     {
       "id": "basic_003",
@@ -58,7 +58,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "情感戏/哭戏铺垫/人物低落",
       "isMicro": false,
       "icon": "fa-regular fa-face-sad-tear",
-      "faceImg": "../../public/img/face/basic_003.png"
+      "faceImg": "/img/face/basic_003.png"
     },
     {
       "id": "basic_004",
@@ -78,7 +78,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "冲突戏/对峙镜头/反派表情",
       "isMicro": false,
       "icon": "fa-regular fa-face-angry",
-      "faceImg": "../../public/img/face/basic_004.png"
+      "faceImg": "/img/face/basic_004.png"
     },
     {
       "id": "basic_005",
@@ -98,7 +98,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "惊悚片/危险场景/惊吓反应",
       "isMicro": false,
       "icon": "fa-regular fa-face-screaming",
-      "faceImg": "../../public/img/face/basic_005.png"
+      "faceImg": "/img/face/basic_005.png"
     },
     {
       "id": "basic_006",
@@ -118,7 +118,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "剧情反转/突发信息/日常反应",
       "isMicro": false,
       "icon": "fa-regular fa-face-surprise",
-      "faceImg": "../../public/img/face/basic_006.png"
+      "faceImg": "/img/face/basic_006.png"
     },
     {
       "id": "basic_007",
@@ -138,7 +138,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "嫌弃镜头/反胃反应/负面剧情",
       "isMicro": false,
       "icon": "fa-regular fa-face-dizzy",
-      "faceImg": "../../public/img/face/basic_007.png"
+      "faceImg": "/img/face/basic_007.png"
     },
     {
       "id": "basic_008",
@@ -158,7 +158,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "对峙戏/优越感/反派神态",
       "isMicro": false,
       "icon": "fa-regular fa-face-meh-blank",
-      "faceImg": "../../public/img/face/basic_008.png"
+      "faceImg": "/img/face/basic_008.png"
     }
   ],
   "single": [
@@ -180,7 +180,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "自定义表情/悲伤组合/哭戏",
       "isMicro": false,
       "icon": "fa-solid fa-eyebrow",
-      "faceImg": "../../public/img/face/single_001.png"
+      "faceImg": "/img/face/single_001.png"
     },
     {
       "id": "single_002",
@@ -200,7 +200,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "自定义表情/惊讶组合/怀疑神态",
       "isMicro": false,
       "icon": "fa-solid fa-eyebrow",
-      "faceImg": "../../public/img/face/single_002.png"
+      "faceImg": "/img/face/single_002.png"
     },
     {
       "id": "single_003",
@@ -220,7 +220,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "自定义表情/愤怒组合/专注神态",
       "isMicro": false,
       "icon": "fa-solid fa-eyebrow",
-      "faceImg": "../../public/img/face/single_003.png"
+      "faceImg": "/img/face/single_003.png"
     },
     {
       "id": "single_004",
@@ -240,7 +240,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "自定义表情/愤怒恐惧组合",
       "isMicro": false,
       "icon": "fa-solid fa-eye",
-      "faceImg": "../../public/img/face/single_004.png"
+      "faceImg": "/img/face/single_004.png"
     }
   ],
   "lipSync": [
@@ -262,7 +262,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "中文口型/语音驱动",
       "isMicro": false,
       "icon": "fa-solid fa-microphone",
-      "faceImg": "../../public/img/face/lipsync_001.png",
+      "faceImg": "/img/face/lipsync_001.png",
       "pinyin": "a",
       "pronunciation": "开口较大，舌位低平"
     },
@@ -284,7 +284,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "中文口型/语音驱动",
       "isMicro": false,
       "icon": "fa-solid fa-microphone",
-      "faceImg": "../../public/img/face/lipsync_002.png",
+      "faceImg": "/img/face/lipsync_002.png",
       "pinyin": "o",
       "pronunciation": "嘴唇前突成圆形，舌位半高"
     },
@@ -306,7 +306,7 @@ const RAW_AU_DATA_OPEN = {
       "scene": "中文口型/语音驱动",
       "isMicro": false,
       "icon": "fa-solid fa-microphone",
-      "faceImg": "../../public/img/face/lipsync_003.png",
+      "faceImg": "/img/face/lipsync_003.png",
       "pinyin": "e",
       "pronunciation": "嘴角微拉，舌位靠后"
     }
