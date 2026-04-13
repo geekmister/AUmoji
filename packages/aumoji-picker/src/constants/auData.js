@@ -332,11 +332,31 @@ const ITEM_FALLBACK_EMOJI = {
   lipSync: '🗣️',
 }
 
+const FACE_IMAGE_MODULES = import.meta.glob('../assets/face/*.{png,jpg,jpeg,webp}', {
+  eager: true,
+})
+
+const FACE_IMAGE_MAP = Object.fromEntries(
+  Object.entries(FACE_IMAGE_MODULES).map(([path, mod]) => {
+    const fileName = path.split('/').pop()
+    return [fileName, mod.default]
+  })
+)
+
+function resolveFaceImgPath(faceImg) {
+  if (!faceImg) return faceImg
+  if (!faceImg.startsWith('/img/face/')) return faceImg
+
+  const fileName = faceImg.split('/').pop()
+  return FACE_IMAGE_MAP[fileName] || faceImg
+}
+
 function normalizeItem(item) {
   const emoji = item.emoji || ITEM_FALLBACK_EMOJI[item.category] || '🙂'
   return {
     ...item,
     emoji,
+    faceImg: resolveFaceImgPath(item.faceImg),
     name: item.nameCn,
     desc: item.descCn,
     prompt: item.promptCn,
