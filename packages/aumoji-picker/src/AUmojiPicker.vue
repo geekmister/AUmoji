@@ -446,7 +446,7 @@ async function copyDetail(text) {
 .aup-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 6px;
 }
 
@@ -476,7 +476,7 @@ async function copyDetail(text) {
   background: transparent;
   cursor: pointer;
   outline: none;
-  min-height: 178px;
+  min-height: 190px;
   transition: background var(--ease), border-color var(--ease), transform 0.1s ease;
 }
 .aup-item:hover  { background: var(--hov); transform: scale(1.05); }
@@ -488,19 +488,20 @@ async function copyDetail(text) {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 96px;
-  border-radius: 8px;
-  overflow: visible;
+  aspect-ratio: 4 / 3;
+  min-height: 92px;
+  max-height: 112px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
   font-size: 22px;
   line-height: 1.1;
 }
 
 .aup-face {
-  width: auto;
-  height: auto;
-  max-width: none;
-  max-height: none;
-  object-fit: unset;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
   border-radius: 0;
 }
@@ -593,11 +594,11 @@ async function copyDetail(text) {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 96px;
-  max-width: none;
-  min-height: 76px;
+  width: 112px;
+  min-width: 112px;
+  height: 84px;
   border-radius: 8px;
-  overflow: visible;
+  overflow: hidden;
   font-size: 30px;
   line-height: 1;
   flex-shrink: 0;
@@ -605,11 +606,9 @@ async function copyDetail(text) {
 }
 
 .aup-detail-face {
-  width: auto;
-  height: auto;
-  max-width: none;
-  max-height: none;
-  object-fit: unset;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
   border-radius: 0;
 }
