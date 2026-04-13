@@ -8,7 +8,8 @@ import Playground from './pages/Playground.vue'
 import Docs from './pages/Docs.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  // Respect Vite base path (e.g. /AUmoji/ on GitHub Pages) for correct initial routing.
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/',            component: Home        },
     { path: '/playground',  component: Playground  },
